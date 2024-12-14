@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class ThemeSwitch extends StatefulWidget {
+  const ThemeSwitch({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<ThemeSwitch> createState() => _ThemeSwitchState();
 }
 
-class _HomeState extends State<Home> {
+class _ThemeSwitchState extends State<ThemeSwitch> {
   final HomeController _controller = Get.put(HomeController());
 
   @override

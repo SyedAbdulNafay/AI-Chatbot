@@ -13,6 +13,7 @@ class LoginPage extends StatelessWidget {
     final LoginController loginController = Get.put(LoginController());
 
     return Scaffold(
+      backgroundColor: Get.theme.colorScheme.surface,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -39,7 +40,7 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: availableHeight * 0.02),
                   const Text(
                     "Login to your account",
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(fontSize: 40, fontFamily: 'HeadingFont'),
                   ),
                   SizedBox(height: availableHeight * 0.02),
                   RichText(
