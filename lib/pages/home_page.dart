@@ -104,7 +104,7 @@ class HomePage extends StatelessWidget {
                     const Text(
                       "History",
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontFamily: 'SecondHeadingFont'),
                     ),
                     SizedBox(
                       width: loginController.responsiveWidth(16, screenWidth),
