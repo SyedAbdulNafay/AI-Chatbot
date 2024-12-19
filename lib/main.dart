@@ -1,4 +1,5 @@
 import 'package:ai_chatbot/firebase_options.dart';
+import 'package:ai_chatbot/pages/chat_page.dart';
 import 'package:ai_chatbot/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: CustomTheme.lightTheme,
       darkTheme: CustomTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const HomePage(),
+      home: const ChatPage(),
     );
   }
 }

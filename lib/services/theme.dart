@@ -9,11 +9,11 @@ class CustomTheme {
       primary: const Color(0xFF612A74),
       secondary: const Color(0xFFE8A089),
       tertiary: const Color(0xFF776F69),
-      surface: Colors.white,
-      inversePrimary: Colors.black,
+      surface: const Color(0xFFF3EEE9),
+      inversePrimary: const Color(0xFF0A0A0A),
     ),
     brightness: Brightness.light,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: const Color(0xFFF3EEE9),
     useMaterial3: true,
     switchTheme: SwitchThemeData(
       thumbColor:
