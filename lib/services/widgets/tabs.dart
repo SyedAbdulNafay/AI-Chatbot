@@ -96,7 +96,8 @@ class Tab extends StatelessWidget {
             vertical: loginController.responsiveHeight(14, screenHeight),
             horizontal: loginController.responsiveWidth(24, screenWidth)),
         margin: EdgeInsets.symmetric(
-            horizontal: loginController.responsiveWidth(24, screenWidth)),
+            horizontal: loginController.responsiveWidth(16, screenWidth),
+            vertical: loginController.responsiveHeight(8, screenHeight)),
         decoration: BoxDecoration(
             border: Border.all(
                 color: isSelected

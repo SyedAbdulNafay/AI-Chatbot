@@ -23,7 +23,7 @@ class Testing extends StatelessWidget {
             ),
             TextField(
               controller: controller,
-              decoration: InputDecoration(),
+              decoration: const InputDecoration(),
             ),
             TextButton(
                 onPressed: () async {
@@ -31,7 +31,7 @@ class Testing extends StatelessWidget {
                   await aiService.generateResponse(controller.text);
                   debugPrint("finished");
                 },
-                child: Text(
+                child: const Text(
                   "Get response",
                   style: TextStyle(color: Colors.yellow, fontSize: 30),
                 ))
@@ -46,7 +46,7 @@ class RectPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Define the rectangle using Rect.fromLTRB(left, top, right, bottom)
-    final Rect rect = Rect.fromLTRB(0, 0, 250, 150);
+    const Rect rect = Rect.fromLTRB(0, 0, 250, 150);
 
     // Create a gradient to fill the rectangle
     final Gradient gradient = LinearGradient(
@@ -56,7 +56,7 @@ class RectPainter extends CustomPainter {
         ],
         begin: Alignment.bottomLeft, // Start of gradient
         end: Alignment.topRight, // End of gradient
-        stops: [0.3, 1.0]);
+        stops: const [0.3, 1.0]);
 
     // Create a Paint object with the gradient
     final Paint paint = Paint()..shader = gradient.createShader(rect);
