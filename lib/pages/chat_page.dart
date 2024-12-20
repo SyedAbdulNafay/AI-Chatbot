@@ -1,7 +1,10 @@
+import 'package:ai_chatbot/controllers/chat_controller.dart';
 import 'package:ai_chatbot/controllers/login_controller.dart';
 import 'package:ai_chatbot/services/widgets/send_button.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class ChatPage extends StatelessWidget {
@@ -10,6 +13,7 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());
+    final ChatController chatController = Get.put(ChatController());
 
     return SafeArea(
       child: LayoutBuilder(builder: (context, constraints) {
@@ -67,10 +71,37 @@ class ChatPage extends StatelessWidget {
             ),
           ),
           body: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: loginController.responsiveWidth(24, screenWidth)),
+            padding: EdgeInsets.only(
+              left: loginController.responsiveWidth(24, screenWidth),
+              right: loginController.responsiveWidth(24, screenWidth),
+              bottom: loginController.responsiveHeight(24, screenHeight),
+            ),
             child: Column(
               children: [
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: chatController.value.value,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 100,
+                      width: 100,
+                      color: Get.theme.colorScheme.primary,
+                    );
+                  },
+                )),
+                // AnimatedTextKit(
+                //   isRepeatingAnimation: false,
+                //   animatedTexts: [
+                //     TypewriterAnimatedText(
+                //       'How may I help you today?',
+                //       textStyle: const TextStyle(
+                //         fontSize: 25,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //       speed: const Duration(milliseconds: 50),
+                //     )
+                //   ],
+                // ),
                 Row(
                   children: [
                     Expanded(
@@ -84,8 +115,8 @@ class ChatPage extends StatelessWidget {
                         ),
                         suffixIcon: IconButton(
                             onPressed: () {},
-                            icon: Icon(
-                              Icons.image_outlined,
+                            icon: SvgPicture.asset(
+                              'assets/svgs/select_image_vector.png',
                               color: Get.theme.colorScheme.tertiary,
                             )),
                         hintText: "Ask me anything...",

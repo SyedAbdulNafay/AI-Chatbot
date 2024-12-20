@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SendButton extends StatelessWidget {
@@ -7,15 +8,14 @@ class SendButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Get.theme.colorScheme.primary,
-      ),
-      child: Icon(
-        Icons.arrow_circle_up_outlined,
-        color: Get.theme.colorScheme.surface,
-      ),
-    );
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Get.theme.colorScheme.primary,
+        ),
+        child: SvgPicture.asset(
+          'assets/svgs/send_button_vector.svg',
+          color: Get.theme.colorScheme.surface,
+        ));
   }
 }
