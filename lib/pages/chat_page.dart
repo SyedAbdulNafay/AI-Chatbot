@@ -1,5 +1,5 @@
 import 'package:ai_chatbot/controllers/chat_controller.dart';
-import 'package:ai_chatbot/controllers/login_controller.dart';
+import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:ai_chatbot/services/widgets/send_button.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +12,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.put(LoginController());
+    final LayoutController layoutController = Get.put(LayoutController());
     final ChatController chatController = Get.put(ChatController());
 
     return SafeArea(
@@ -48,7 +48,7 @@ class ChatPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: loginController.responsiveWidth(16, screenWidth),
+                      width: layoutController.responsiveWidth(16, screenWidth),
                     ),
                     Text(
                       "Chat Bot AI 4.5",
@@ -72,9 +72,9 @@ class ChatPage extends StatelessWidget {
           ),
           body: Padding(
             padding: EdgeInsets.only(
-              left: loginController.responsiveWidth(24, screenWidth),
-              right: loginController.responsiveWidth(24, screenWidth),
-              bottom: loginController.responsiveHeight(24, screenHeight),
+              left: layoutController.responsiveWidth(24, screenWidth),
+              right: layoutController.responsiveWidth(24, screenWidth),
+              bottom: layoutController.responsiveHeight(24, screenHeight),
             ),
             child: Column(
               children: [
@@ -109,14 +109,14 @@ class ChatPage extends StatelessWidget {
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           horizontal:
-                              loginController.responsiveWidth(24, screenWidth),
-                          vertical: loginController.responsiveHeight(
+                              layoutController.responsiveWidth(24, screenWidth),
+                          vertical: layoutController.responsiveHeight(
                               16, screenHeight),
                         ),
                         suffixIcon: IconButton(
                             onPressed: () {},
                             icon: SvgPicture.asset(
-                              'assets/svgs/select_image_vector.png',
+                              'assets/svgs/select_image_vector.svg',
                               color: Get.theme.colorScheme.tertiary,
                             )),
                         hintText: "Ask me anything...",
@@ -139,7 +139,7 @@ class ChatPage extends StatelessWidget {
                       ),
                     )),
                     SizedBox(
-                      width: loginController.responsiveWidth(12, screenWidth),
+                      width: layoutController.responsiveWidth(12, screenWidth),
                     ),
                     const SendButton()
                   ],

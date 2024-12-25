@@ -1,4 +1,4 @@
-import 'package:ai_chatbot/controllers/login_controller.dart';
+import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,12 +19,13 @@ class ChatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.find();
+    final LayoutController layoutController = Get.find();
+
     return Container(
       width: double.maxFinite,
       padding: EdgeInsets.symmetric(
-        vertical: loginController.responsiveHeight(32, screenHeight),
-        horizontal: loginController.responsiveWidth(24, screenWidth),
+        vertical: layoutController.responsiveHeight(32, screenHeight),
+        horizontal: layoutController.responsiveWidth(24, screenWidth),
       ),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(36),
@@ -43,7 +44,7 @@ class ChatCard extends StatelessWidget {
                 fontFamily: 'SecondHeadingFont',
                 fontSize: 16),
           ),
-          SizedBox(height: loginController.responsiveHeight(12, screenHeight)),
+          SizedBox(height: layoutController.responsiveHeight(12, screenHeight)),
           Text(
             content,
             maxLines: 5,
@@ -53,7 +54,7 @@ class ChatCard extends StatelessWidget {
               fontSize: 16,
             ),
           ),
-          SizedBox(height: loginController.responsiveHeight(12, screenHeight)),
+          SizedBox(height: layoutController.responsiveHeight(12, screenHeight)),
           Text(
             time,
             style: TextStyle(

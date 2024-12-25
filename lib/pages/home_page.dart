@@ -1,4 +1,4 @@
-import 'package:ai_chatbot/controllers/login_controller.dart';
+import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:ai_chatbot/services/widgets/chat_card.dart';
 import 'package:ai_chatbot/services/widgets/gradient_text.dart';
 import 'package:ai_chatbot/services/widgets/tabs.dart';
@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.put(LoginController());
+    final LayoutController layoutController = Get.put(LayoutController());
     final HomeController homeController = Get.put(HomeController());
 
     return Scaffold(
@@ -31,10 +31,10 @@ class HomePage extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   background: Padding(
                     padding: EdgeInsets.only(
-                      left: loginController.responsiveWidth(24, screenWidth),
-                      right: loginController.responsiveWidth(24, screenWidth),
-                      top: loginController.responsiveWidth(24, screenWidth),
-                      bottom: loginController.responsiveWidth(32, screenWidth),
+                      left: layoutController.responsiveWidth(24, screenWidth),
+                      right: layoutController.responsiveWidth(24, screenWidth),
+                      top: layoutController.responsiveWidth(24, screenWidth),
+                      bottom: layoutController.responsiveWidth(32, screenWidth),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,9 +66,9 @@ class HomePage extends StatelessWidget {
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: loginController.responsiveWidth(
+                                horizontal: layoutController.responsiveWidth(
                                     24, screenWidth),
-                                vertical: loginController.responsiveHeight(
+                                vertical: layoutController.responsiveHeight(
                                     18, screenHeight),
                               ),
                               decoration: BoxDecoration(
@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
                                 children: [
                                   const Icon(Icons.add),
                                   SizedBox(
-                                    width: loginController.responsiveWidth(
+                                    width: layoutController.responsiveWidth(
                                         4, screenWidth),
                                   ),
                                   Text(
@@ -115,14 +115,14 @@ class HomePage extends StatelessWidget {
                           color: Get.theme.colorScheme.surface,
                           child: Padding(
                             padding: EdgeInsets.only(
-                              left: loginController.responsiveWidth(
+                              left: layoutController.responsiveWidth(
                                   24, screenWidth),
-                              right: loginController.responsiveWidth(
+                              right: layoutController.responsiveWidth(
                                   24, screenWidth),
-                              top: loginController.responsiveWidth(
+                              top: layoutController.responsiveWidth(
                                   32, screenWidth),
                               bottom:
-                                  loginController.responsiveWidth(8, screenWidth),
+                                  layoutController.responsiveWidth(8, screenWidth),
                             ),
                             child: Row(
                               children: [
@@ -133,7 +133,7 @@ class HomePage extends StatelessWidget {
                                       fontFamily: 'SecondHeadingFont'),
                                 ),
                                 SizedBox(
-                                  width: loginController.responsiveWidth(
+                                  width: layoutController.responsiveWidth(
                                       16, screenWidth),
                                 ),
                                 Expanded(
@@ -183,11 +183,11 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
-                          left: loginController.responsiveWidth(8, screenWidth),
+                          left: layoutController.responsiveWidth(8, screenWidth),
                           right:
-                              loginController.responsiveWidth(4, screenWidth),
+                              layoutController.responsiveWidth(4, screenWidth),
                           top:
-                              loginController.responsiveHeight(8, screenHeight),
+                              layoutController.responsiveHeight(8, screenHeight),
                         ),
                         child: ChatCard(
                           screenHeight: screenHeight,
@@ -206,10 +206,10 @@ class HomePage extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.only(
                           right:
-                              loginController.responsiveWidth(8, screenWidth),
-                          left: loginController.responsiveWidth(4, screenWidth),
+                              layoutController.responsiveWidth(8, screenWidth),
+                          left: layoutController.responsiveWidth(4, screenWidth),
                           top:
-                              loginController.responsiveHeight(8, screenHeight),
+                              layoutController.responsiveHeight(8, screenHeight),
                         ),
                         child: ChatCard(
                           screenHeight: screenHeight,

@@ -1,12 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginController extends GetxController {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  var showPassword = false.obs;
-
+class LayoutController extends GetxController {
   double responsiveHeight(double pixelValue, double screenHeight) {
     return screenHeight * (pixelValue / 928);
   }

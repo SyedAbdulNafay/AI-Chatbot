@@ -5,7 +5,7 @@ class CustomTheme {
   static final lightTheme = ThemeData(
     fontFamily: "MainFont",
     colorScheme: ColorScheme.light(
-      outline: lightThemeNeutral1.withOpacity(0.28),
+      outline: lightThemeNeutral1.withOpacity(0.12),
       primary: const Color(0xFF612A74),
       secondary: const Color(0xFFE8A089),
       tertiary: const Color(0xFF776F69),
@@ -42,6 +42,6 @@ class CustomTheme {
     iconTheme: const IconThemeData(color: Color(0xFFDF9ECD)),
   );
 
-  static Color lightThemeNeutral1 = const Color(0xFF7A808C),
+  static Color lightThemeNeutral1 = const Color(0xFF7D6E60),
       darkThemeNeutral1 = const Color(0xFF7A808C);
 }

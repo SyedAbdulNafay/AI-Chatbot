@@ -1,33 +1,52 @@
+import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SocialsButton extends StatelessWidget {
-  final String filePath;
+  final double screenWidth;
+  final double screenHeight;
+  final String? filePath;
   final String title;
-  const SocialsButton({super.key, required this.filePath, required this.title});
+  final void Function()? onTap;
+  const SocialsButton(
+      {super.key,
+      this.filePath,
+      required this.title,
+      required this.screenWidth,
+      required this.screenHeight,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 44.5, vertical: 16),
-      width: (Get.mediaQuery.size.width - 80) / 2,
-      height: 56,
-      decoration: BoxDecoration(
-        color: Get.theme.colorScheme.outline,
-        borderRadius: BorderRadius.circular(36),
-      ),
-      child: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(filePath),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            )
-          ],
+    final LayoutController layoutController = Get.find();
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            vertical: layoutController.responsiveHeight(20, screenHeight)),
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+          color: Get.isDarkMode
+              ? Get.theme.colorScheme.tertiary
+              : Get.theme.colorScheme.outline,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (filePath != null) SvgPicture.asset(filePath!),
+              SizedBox(
+                  width: layoutController.responsiveWidth(15, screenWidth)),
+              Text(
+                title,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              )
+            ],
+          ),
         ),
       ),
     );

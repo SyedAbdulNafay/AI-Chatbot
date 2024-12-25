@@ -1,5 +1,6 @@
 import 'package:ai_chatbot/controllers/home_controller.dart';
-import 'package:ai_chatbot/controllers/login_controller.dart';
+import 'package:ai_chatbot/controllers/layout_controller.dart';
+import 'package:ai_chatbot/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +13,7 @@ class Tabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.put(HomeController());
+
     return Obx(() => SizedBox(
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -88,16 +90,17 @@ class Tab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.find();
+    final LayoutController layoutController = Get.find();
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-            vertical: loginController.responsiveHeight(14, screenHeight),
-            horizontal: loginController.responsiveWidth(24, screenWidth)),
+            vertical: layoutController.responsiveHeight(14, screenHeight),
+            horizontal: layoutController.responsiveWidth(24, screenWidth)),
         margin: EdgeInsets.symmetric(
-            horizontal: loginController.responsiveWidth(16, screenWidth),
-            vertical: loginController.responsiveHeight(8, screenHeight)),
+            horizontal: layoutController.responsiveWidth(16, screenWidth),
+            vertical: layoutController.responsiveHeight(8, screenHeight)),
         decoration: BoxDecoration(
             border: Border.all(
                 color: isSelected
@@ -111,7 +114,7 @@ class Tab extends StatelessWidget {
           children: [
             icon,
             SizedBox(
-              width: loginController.responsiveWidth(11, screenWidth),
+              width: layoutController.responsiveWidth(11, screenWidth),
             ),
             Text(
               text,
