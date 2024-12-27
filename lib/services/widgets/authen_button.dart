@@ -1,9 +1,12 @@
-import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/layout_controller.dart';
+
 class AuthenButton extends StatelessWidget {
-  final bool isLoading;
+  final bool? disabled;
+  final String title;
+  final bool? isLoading;
   final double screenHeight;
   final double screenWidth;
   final void Function()? onTap;
@@ -12,7 +15,9 @@ class AuthenButton extends StatelessWidget {
       required this.screenHeight,
       this.onTap,
       required this.screenWidth,
-      required this.isLoading});
+      this.isLoading,
+      required this.title,
+      this.disabled});
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +36,19 @@ class AuthenButton extends StatelessWidget {
                 vertical: layoutController.responsiveHeight(15, screenHeight),
                 horizontal: layoutController.responsiveWidth(10, screenWidth)),
             decoration: BoxDecoration(
-              color: Get.theme.colorScheme.primary,
+              color: Get.theme.colorScheme.primary
+                  .withOpacity(disabled ?? false ? 0.6 : 1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: isLoading
+              child: isLoading ?? false
                   ? SizedBox(
                       child: CircularProgressIndicator(
                         color: Get.theme.colorScheme.surface,
                       ),
                     )
                   : Text(
-                      "Continue",
+                      title,
                       style: TextStyle(
                         color: Get.theme.colorScheme.surface,
                         fontSize: 18,

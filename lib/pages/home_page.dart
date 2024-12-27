@@ -1,18 +1,19 @@
-import 'package:ai_chatbot/controllers/layout_controller.dart';
-import 'package:ai_chatbot/services/widgets/chat_card.dart';
-import 'package:ai_chatbot/services/widgets/gradient_text.dart';
-import 'package:ai_chatbot/services/widgets/tabs.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
+import '../controllers/layout_controller.dart';
+import '../services/widgets/chat_card.dart';
+import '../services/widgets/gradient_text.dart';
+import '../services/widgets/tabs.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
+    final LayoutController layoutController = Get.find();
     final HomeController homeController = Get.put(HomeController());
 
     return Scaffold(

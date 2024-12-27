@@ -1,17 +1,18 @@
-import 'package:ai_chatbot/controllers/auth_controller.dart';
-import 'package:ai_chatbot/controllers/layout_controller.dart';
-import 'package:ai_chatbot/services/widgets/authen_button.dart';
-import 'package:ai_chatbot/services/widgets/my_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/auth_controller.dart';
+import '../../controllers/layout_controller.dart';
+import '../../services/widgets/authen_button.dart';
+import '../../services/widgets/my_textfield.dart';
 
 class SignupEmailPage extends StatelessWidget {
   const SignupEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
+    final LayoutController layoutController = Get.find();
     final AuthController authController = Get.put(AuthController());
 
     return Scaffold(
@@ -65,28 +66,8 @@ class SignupEmailPage extends StatelessWidget {
                             height: layoutController.responsiveHeight(
                                 32, screenHeight),
                           ),
-                          // Obx(() => MysTextfield(
-                          //       hintText: 'Password',
-                          //       prefixIcon: Icons.key,
-                          //       controller: authController.passwordController,
-                          //       validator: authController.passwordValidator,
-                          //       obscureText: !authController.showPassword.value,
-                          //       suffixIcon: GestureDetector(
-                          //         onTap: () {
-                          //           authController.showPassword.value =
-                          //               !authController.showPassword.value;
-                          //         },
-                          //         child: Icon(
-                          //           authController.showPassword.value
-                          //               ? Icons.visibility_off_outlined
-                          //               : Icons.visibility_outlined,
-                          //           color: Get.theme.colorScheme.primary,
-                          //         ),
-                          //       ),
-                          //       screenWidth: screenWidth,
-                          //       screenHeight: screenHeight,
-                          //     )),
                           Obx(() => AuthenButton(
+                                title: 'Continue',
                                 isLoading: authController.isSigningIn.value,
                                 screenWidth: screenWidth,
                                 screenHeight: screenHeight,

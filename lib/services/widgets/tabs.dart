@@ -1,8 +1,8 @@
-import 'package:ai_chatbot/controllers/home_controller.dart';
-import 'package:ai_chatbot/controllers/layout_controller.dart';
-import 'package:ai_chatbot/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/home_controller.dart';
+import '../../controllers/layout_controller.dart';
 
 class Tabs extends StatelessWidget {
   final double screenWidth;

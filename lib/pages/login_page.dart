@@ -1,8 +1,8 @@
-import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../controllers/layout_controller.dart';
 import '../services/widgets/my_textfield.dart';
 import '../services/widgets/socials_button.dart';
 

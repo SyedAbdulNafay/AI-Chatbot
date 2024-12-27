@@ -1,8 +1,12 @@
-import 'package:ai_chatbot/pages/signup/signup_password_page.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+
+import '../pages/home_page.dart';
+import '../pages/signup/signup_password_page.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -22,7 +26,18 @@ class AuthController extends GetxController {
   var isLoggingIn = false.obs;
   var isSigningIn = false.obs;
   var showPassword = false.obs;
+  var canResendEmail = false.obs;
+  var isEmailVerified = false.obs;
+  var countdown = 120.obs;
+  Timer? countdownTimer;
   var emailError = RxnString();
+
+  String get countdownFormatted {
+    int minutes = countdown.value ~/ 60;
+    int seconds = countdown.value % 60;
+
+    return '${minutes.toString().padLeft(1, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
 
   Future<void> verifyEmail() async {
     if (signupEmailFormKey.currentState!.validate()) {
@@ -52,11 +67,70 @@ class AuthController extends GetxController {
     }
   }
 
-  void verifyPassword() {
+  Future<void> verifyPassword() async {
     if (signupPasswordFormKey.currentState!.validate()) {
       debugPrint("approved");
-      _auth.sendSignInLinkToEmail(email: emailController.text, actionCodeSettings: actionCodeSettings)
+
+      isSigningIn.value = true;
+
+      try {
+        await _auth.createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim());
+
+        await sendVerificationEmail();
+      } catch (e) {
+        debugPrint("Error during signup: $e");
+      } finally {
+        isSigningIn.value = false;
+      }
     }
+  }
+
+  Future<void> sendVerificationEmail() async {
+    final user = _auth.currentUser;
+
+    if (user != null && !user.emailVerified) {
+      try {
+        await user.sendEmailVerification();
+        Get.snackbar(
+          "Verification Email Sent",
+          "A verification email has been sent to ${user.email}. Please verify before continuing",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        startCountdown();
+      } catch (e) {
+        debugPrint("Error sending verification email: $e");
+      }
+    }
+  }
+
+  void checkEmailVerified() {
+    Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
+      await FirebaseAuth.instance.currentUser?.reload(); // Reload user data
+      isEmailVerified.value =
+          FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+
+      if (isEmailVerified.value) {
+        timer.cancel(); // Stop polling
+        countdownTimer?.cancel();
+        Get.offAll(() => const HomePage()); // Navigate to the home screen
+      }
+    });
+  }
+
+  void startCountdown() {
+    countdown.value = 120;
+    canResendEmail.value = false;
+    countdownTimer?.cancel();
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (countdown.value > 0) {
+        countdown.value--;
+      } else {
+        canResendEmail.value = true;
+        timer.cancel();
+      }
+    });
   }
 
   //validators

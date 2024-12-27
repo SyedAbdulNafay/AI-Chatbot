@@ -1,10 +1,10 @@
-import 'package:ai_chatbot/pages/login_page.dart';
-import 'package:ai_chatbot/pages/signup/signup_email_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/layout_controller.dart';
 import '../../services/widgets/socials_button.dart';
+import '../login_page.dart';
+import 'signup_email_page.dart';
 
 class SignupIntroPage extends StatelessWidget {
   const SignupIntroPage({super.key});

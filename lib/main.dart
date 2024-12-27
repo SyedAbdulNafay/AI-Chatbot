@@ -1,11 +1,9 @@
-import 'package:ai_chatbot/firebase_options.dart';
-import 'package:ai_chatbot/pages/home_page.dart';
-import 'package:ai_chatbot/pages/login_page.dart';
-import 'package:ai_chatbot/pages/signup/signup_intro_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'firebase_options.dart';
+import 'pages/signup/signup_intro_page.dart';
 import 'services/theme.dart';
 
 Future<void> main() async {

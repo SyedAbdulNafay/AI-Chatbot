@@ -1,6 +1,7 @@
-import 'package:ai_chatbot/controllers/layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../controllers/layout_controller.dart';
 
 class ChatCard extends StatelessWidget {
   final double screenHeight;

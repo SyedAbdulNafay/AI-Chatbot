@@ -1,11 +1,13 @@
-import 'package:ai_chatbot/controllers/chat_controller.dart';
-import 'package:ai_chatbot/controllers/layout_controller.dart';
-import 'package:ai_chatbot/services/widgets/send_button.dart';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
+import '../controllers/chat_controller.dart';
+import '../controllers/layout_controller.dart';
+import '../services/widgets/send_button.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});

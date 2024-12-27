@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:herbertai/pages/signup/signup_verification_page.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../controllers/layout_controller.dart';
@@ -12,8 +13,8 @@ class SignupPasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
-    final AuthController authController = Get.put(AuthController());
+    final LayoutController layoutController = Get.find();
+    final AuthController authController = Get.find();
 
     return Scaffold(
       appBar: AppBar(
@@ -80,10 +81,18 @@ class SignupPasswordPage extends StatelessWidget {
                                 32, screenHeight),
                           ),
                           Obx(() => AuthenButton(
+                                title: "Continue",
                                 isLoading: authController.isSigningIn.value,
                                 screenWidth: screenWidth,
                                 screenHeight: screenHeight,
-                                onTap: () => authController.verifyPassword(),
+                                onTap: () async {
+                                  await authController.verifyPassword();
+                                  authController.checkEmailVerified();
+                                  Get.to(
+                                    () => const SignupVerificationPage(),
+                                    transition: Transition.rightToLeft,
+                                  );
+                                },
                               ))
                         ],
                       ))
