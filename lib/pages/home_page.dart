@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:herbertai/controllers/auth_controller.dart';
 
 import '../controllers/home_controller.dart';
 import '../controllers/layout_controller.dart';
@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
     final HomeController homeController = Get.put(HomeController());
+    // final AuthController authController = Get.find();
 
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,
@@ -28,18 +29,39 @@ class HomePage extends StatelessWidget {
             slivers: [
               SliverAppBar(
                 backgroundColor: Get.theme.colorScheme.surface,
-                expandedHeight: 208,
+                expandedHeight: 255,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Padding(
                     padding: EdgeInsets.only(
                       left: layoutController.responsiveWidth(24, screenWidth),
                       right: layoutController.responsiveWidth(24, screenWidth),
-                      top: layoutController.responsiveWidth(24, screenWidth),
+                      top: layoutController.responsiveWidth(12, screenWidth),
                       bottom: layoutController.responsiveWidth(32, screenWidth),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Get.theme.colorScheme.tertiary
+                                      .withOpacity(0.28)),
+                              child: Icon(
+                                Icons.person,
+                                color: Get.theme.colorScheme.tertiary,
+                                size: 40,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: layoutController.responsiveHeight(
+                              12, screenHeight),
+                        ),
                         const Text(
                           "Start a new chat",
                           style: TextStyle(
@@ -122,8 +144,8 @@ class HomePage extends StatelessWidget {
                                   24, screenWidth),
                               top: layoutController.responsiveWidth(
                                   32, screenWidth),
-                              bottom:
-                                  layoutController.responsiveWidth(8, screenWidth),
+                              bottom: layoutController.responsiveWidth(
+                                  8, screenWidth),
                             ),
                             child: Row(
                               children: [
@@ -158,7 +180,8 @@ class HomePage extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(32)),
                                       border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(32),
+                                          borderRadius:
+                                              BorderRadius.circular(32),
                                           borderSide: BorderSide(
                                               color: Get
                                                   .theme.colorScheme.tertiary
@@ -184,11 +207,12 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.only(
-                          left: layoutController.responsiveWidth(8, screenWidth),
+                          left:
+                              layoutController.responsiveWidth(8, screenWidth),
                           right:
                               layoutController.responsiveWidth(4, screenWidth),
-                          top:
-                              layoutController.responsiveHeight(8, screenHeight),
+                          top: layoutController.responsiveHeight(
+                              8, screenHeight),
                         ),
                         child: ChatCard(
                           screenHeight: screenHeight,
@@ -208,9 +232,10 @@ class HomePage extends StatelessWidget {
                         padding: EdgeInsets.only(
                           right:
                               layoutController.responsiveWidth(8, screenWidth),
-                          left: layoutController.responsiveWidth(4, screenWidth),
-                          top:
-                              layoutController.responsiveHeight(8, screenHeight),
+                          left:
+                              layoutController.responsiveWidth(4, screenWidth),
+                          top: layoutController.responsiveHeight(
+                              8, screenHeight),
                         ),
                         child: ChatCard(
                           screenHeight: screenHeight,

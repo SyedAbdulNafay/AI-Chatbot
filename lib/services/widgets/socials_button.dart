@@ -8,12 +8,12 @@ class SocialsButton extends StatelessWidget {
   final double screenWidth;
   final double screenHeight;
   final String? filePath;
-  final String title;
+  final String? title;
   final void Function()? onTap;
   const SocialsButton(
       {super.key,
       this.filePath,
-      required this.title,
+      this.title,
       required this.screenWidth,
       required this.screenHeight,
       this.onTap});
@@ -41,11 +41,12 @@ class SocialsButton extends StatelessWidget {
               if (filePath != null) SvgPicture.asset(filePath!),
               SizedBox(
                   width: layoutController.responsiveWidth(15, screenWidth)),
-              Text(
-                title,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              )
+              if (title != null)
+                Text(
+                  title!,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                )
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
@@ -12,7 +13,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.put(LayoutController());
-    final AuthController loginController = Get.put(AuthController());
+    final AuthController authController = Get.put(AuthController());
 
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,
@@ -22,32 +23,20 @@ class LoginPage extends StatelessWidget {
             final screenHeight = constraints.maxHeight;
             final screenWidth = constraints.maxWidth;
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal:
-                        layoutController.responsiveWidth(32, screenWidth)),
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal:
+                      layoutController.responsiveWidth(32, screenWidth)),
+              child: Form(
+                key: authController.loginFormKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                          top: layoutController.responsiveHeight(
-                              64, screenHeight)),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Get.theme.colorScheme.inversePrimary,
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      child: Icon(
-                        Icons.gamepad,
-                        color: Get.theme.colorScheme.surface,
-                        size: 42,
+                    Expanded(
+                      child: SvgPicture.asset(
+                        'assets/svgs/login_vector.svg',
                       ),
                     ),
-                    SizedBox(
-                        height: layoutController.responsiveHeight(
-                            24, screenHeight)),
                     const Text(
                       "Login to your account",
                       style: TextStyle(fontSize: 40, fontFamily: 'HeadingFont'),
@@ -55,38 +44,41 @@ class LoginPage extends StatelessWidget {
                     SizedBox(
                         height: layoutController.responsiveHeight(
                             16, screenHeight)),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Don\'t have an account? ',
-                        style: TextStyle(color: Get.theme.colorScheme.tertiary),
-                        children: [
-                          TextSpan(
-                            text: 'Sign Up',
-                            style:
-                                TextStyle(color: Get.theme.colorScheme.primary),
-                          ),
-                        ],
-                      ),
+                    MyTextfield(
+                      hintText: 'Email',
+                      prefixIcon: Icons.email_outlined,
+                      controller: authController.emailController,
+                      validator: authController.emailValidator,
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
                     ),
                     SizedBox(
                         height: layoutController.responsiveHeight(
-                            40, screenHeight)),
-                    // MyTextfield(
-                    //   hintText: "Email",
-                    //   prefixIcon: Icons.email_outlined,
-                    //   obscureText: loginController.showPassword.value,
-                    // ),
-                    // SizedBox(
-                    //     height: layoutController.responsiveHeight(
-                    //         24, screenHeight)),
-                    // MyTextfield(
-                    //   hintText: "Password",
-                    //   prefixIcon: Icons.key_rounded,
-                    //   obscureText: loginController.showPassword.value,
-                    // ),
+                            24, screenHeight)),
+                    Obx(() => MyTextfield(
+                          hintText: 'Password',
+                          prefixIcon: Icons.key,
+                          controller: authController.passwordController,
+                          validator: authController.passwordValidator,
+                          obscureText: !authController.showPassword.value,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              authController.showPassword.value =
+                                  !authController.showPassword.value;
+                            },
+                            child: Icon(
+                              authController.showPassword.value
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              color: Get.theme.colorScheme.primary,
+                            ),
+                          ),
+                          screenWidth: screenWidth,
+                          screenHeight: screenHeight,
+                        )),
                     SizedBox(
                         height: layoutController.responsiveHeight(
-                            24, screenHeight)),
+                            20, screenHeight)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -102,30 +94,39 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(
                         height: layoutController.responsiveHeight(
-                            32, screenHeight)),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: layoutController.responsiveHeight(
-                              18, screenHeight)),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Get.theme.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(36),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            color: Get.theme.colorScheme.surface,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                            20, screenHeight)),
+                    GestureDetector(
+                      onTap: () async {
+                        await authController.login();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: layoutController.responsiveHeight(
+                                18, screenHeight)),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Get.theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(36),
                         ),
+                        child: Obx(() => Center(
+                              child: authController.isLoggingIn.value
+                                  ? CircularProgressIndicator(
+                                      color: Get.theme.colorScheme.surface,
+                                    )
+                                  : Text(
+                                      "Login",
+                                      style: TextStyle(
+                                        color: Get.theme.colorScheme.surface,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                            )),
                       ),
                     ),
                     SizedBox(
                         height: layoutController.responsiveHeight(
-                            32, screenHeight)),
+                            20, screenHeight)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -159,33 +160,64 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                        height: layoutController.responsiveHeight(
-                            32, screenHeight)),
-                    // social buttons
-                    // const Row(
-                    //   children: [
-                    //     SocialsButton(
-                    //       filePath: 'assets/images/google_logo.svg',
-                    //       title: "Google",
-                    //     ),
-                    //     SocialsButton(
-                    //       filePath: 'assets/images/facebook_logo.svg',
-                    //       title: "Facebook",
-                    //     ),
-                    //   ],
-                    // ),
+                      height:
+                          layoutController.responsiveHeight(20, screenHeight),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 14),
+                          decoration: BoxDecoration(
+                              color: Get.theme.colorScheme.outline,
+                              borderRadius: BorderRadius.circular(16)),
+                          child:
+                              SvgPicture.asset('assets/images/google_logo.svg'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 14),
+                          decoration: BoxDecoration(
+                              color: Get.theme.colorScheme.outline,
+                              borderRadius: BorderRadius.circular(16)),
+                          child: SvgPicture.asset(
+                              'assets/images/facebook_logo.svg'),
+                        ),
+                      ],
+                    ),
                     SizedBox(
-                        height: layoutController.responsiveHeight(
-                            90, screenHeight)),
+                      height:
+                          layoutController.responsiveHeight(16, screenHeight),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Terms of use"),
-                        SizedBox(width: screenWidth * 0.02),
-                        const Text("|"),
-                        SizedBox(width: screenWidth * 0.02),
-                        const Text("Privacy policy"),
+                        Text(
+                          "Don't have an account? ",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Get.theme.colorScheme.tertiary,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            authController.showLoginPage.value = false;
+                          },
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Get.theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        )
                       ],
+                    ),
+                    SizedBox(
+                      height:
+                          layoutController.responsiveHeight(16, screenHeight),
                     ),
                   ],
                 ),

@@ -9,7 +9,8 @@ import '../pages/home_page.dart';
 import '../pages/signup/signup_password_page.dart';
 
 class AuthController extends GetxController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  UserCredential? userCredential;
 
   // form keys
   final loginFormKey = GlobalKey<FormState>();
@@ -26,17 +27,61 @@ class AuthController extends GetxController {
   var isLoggingIn = false.obs;
   var isSigningIn = false.obs;
   var showPassword = false.obs;
+  var showLoginPage = true.obs;
   var canResendEmail = false.obs;
   var isEmailVerified = false.obs;
+  var isUserLoggedIn = false.obs;
   var countdown = 120.obs;
   Timer? countdownTimer;
   var emailError = RxnString();
+
+  @override
+  void onInit() {
+    super.onInit();
+    auth.authStateChanges().listen((user) {
+      if (user != null) {
+        isUserLoggedIn.value = true;
+      } else {
+        isUserLoggedIn.value = false;
+      }
+    });
+  }
 
   String get countdownFormatted {
     int minutes = countdown.value ~/ 60;
     int seconds = countdown.value % 60;
 
     return '${minutes.toString().padLeft(1, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> login() async {
+    debugPrint(isUserLoggedIn.value.toString());
+    if (loginFormKey.currentState!.validate()) {
+      isLoggingIn.value = true;
+
+      try {
+        final query = FirebaseFirestore.instance
+            .collection("Users")
+            .where("email", isEqualTo: emailController.text);
+        final querysnapshot = await query.get();
+
+        if (querysnapshot.docs.isEmpty) {
+          Get.snackbar("Error", "This email is not valid");
+          isLoggingIn.value = false;
+          return;
+        }
+
+        await auth.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          Get.snackbar("Error", "User not found");
+        }
+      }
+      isLoggingIn.value = false;
+    }
   }
 
   Future<void> verifyEmail() async {
@@ -74,7 +119,7 @@ class AuthController extends GetxController {
       isSigningIn.value = true;
 
       try {
-        await _auth.createUserWithEmailAndPassword(
+        userCredential = await auth.createUserWithEmailAndPassword(
             email: emailController.text.trim(),
             password: passwordController.text.trim());
 
@@ -88,7 +133,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> sendVerificationEmail() async {
-    final user = _auth.currentUser;
+    final user = auth.currentUser;
 
     if (user != null && !user.emailVerified) {
       try {
@@ -114,9 +159,33 @@ class AuthController extends GetxController {
       if (isEmailVerified.value) {
         timer.cancel(); // Stop polling
         countdownTimer?.cancel();
-        Get.offAll(() => const HomePage()); // Navigate to the home screen
+        try {
+          await createUserDocument();
+          Get.offAll(() => const HomePage());
+        } catch (e) {
+          Get.snackbar(
+            "Error creating user",
+            "$e",
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       }
     });
+  }
+
+  Future<void> createUserDocument() async {
+    if (userCredential != null && userCredential?.user != null) {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential?.user!.uid)
+          .set({
+        'userId': userCredential?.user!.uid,
+        'email': userCredential?.user!.email,
+        'username': usernameController.text,
+        'bio': 'Empty bio...',
+        'profilePicture': 'not selected'
+      });
+    }
   }
 
   void startCountdown() {

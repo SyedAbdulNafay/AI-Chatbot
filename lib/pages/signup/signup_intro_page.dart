@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:herbertai/controllers/auth_controller.dart';
 
 import '../../controllers/layout_controller.dart';
 import '../../services/widgets/socials_button.dart';
@@ -12,6 +13,7 @@ class SignupIntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.put(LayoutController());
+    final AuthController authController = Get.put(AuthController());
 
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,
@@ -124,7 +126,7 @@ class SignupIntroPage extends StatelessWidget {
                             color: Get.theme.colorScheme.tertiary),
                       ),
                       GestureDetector(
-                        onTap: () => Get.to(const LoginPage()),
+                        onTap: () => authController.showLoginPage.value = true,
                         child: Text(
                           "Log In",
                           style: TextStyle(

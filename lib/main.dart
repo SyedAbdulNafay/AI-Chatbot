@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:herbertai/pages/auth_page.dart';
 
 import 'firebase_options.dart';
-import 'pages/signup/signup_intro_page.dart';
 import 'services/theme.dart';
 
 Future<void> main() async {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: CustomTheme.lightTheme,
       darkTheme: CustomTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const SignupIntroPage(),
+      home: const AuthPage(),
     );
   }
 }
