@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herbertai/controllers/auth_controller.dart';
-import 'package:herbertai/pages/login_page.dart';
-import 'package:herbertai/pages/signup/signup_intro_page.dart';
+
+import '../controllers/auth_controller.dart';
+import 'login_page.dart';
+import 'signup/signup_intro_page.dart';
 
 class LoginOrSignup extends StatelessWidget {
   const LoginOrSignup({super.key});

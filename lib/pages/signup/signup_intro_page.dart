@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herbertai/controllers/auth_controller.dart';
 
+import '../../controllers/auth_controller.dart';
 import '../../controllers/layout_controller.dart';
 import '../../services/widgets/socials_button.dart';
-import '../login_page.dart';
 import 'signup_email_page.dart';
 
 class SignupIntroPage extends StatelessWidget {
@@ -12,8 +11,8 @@ class SignupIntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
-    final AuthController authController = Get.put(AuthController());
+    final LayoutController layoutController = Get.find();
+    final AuthController authController = Get.find();
 
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,

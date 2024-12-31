@@ -13,7 +13,7 @@ class SignupEmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
-    final AuthController authController = Get.put(AuthController());
+    final AuthController authController = Get.find();
 
     return Scaffold(
       appBar: AppBar(

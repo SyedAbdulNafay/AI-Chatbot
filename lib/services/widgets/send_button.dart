@@ -15,7 +15,10 @@ class SendButton extends StatelessWidget {
         ),
         child: SvgPicture.asset(
           'assets/svgs/send_button_vector.svg',
-          color: Get.theme.colorScheme.surface,
+          colorFilter: ColorFilter.mode(
+            Get.theme.colorScheme.tertiary,
+            BlendMode.srcIn,
+          ),
         ));
   }
 }

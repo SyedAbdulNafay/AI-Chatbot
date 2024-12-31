@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +12,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
+    final LayoutController layoutController = Get.find();
     final ChatController chatController = Get.put(ChatController());
 
     return SafeArea(
@@ -118,7 +117,10 @@ class ChatPage extends StatelessWidget {
                             onPressed: () {},
                             icon: SvgPicture.asset(
                               'assets/svgs/select_image_vector.svg',
-                              color: Get.theme.colorScheme.tertiary,
+                              colorFilter: ColorFilter.mode(
+                                Get.theme.colorScheme.tertiary,
+                                BlendMode.srcIn,
+                              ),
                             )),
                         hintText: "Ask me anything...",
                         hintStyle:

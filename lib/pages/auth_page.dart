@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herbertai/controllers/auth_controller.dart';
-import 'package:herbertai/pages/home_page.dart';
-import 'package:herbertai/pages/login_or_signup.dart';
+
+import '../controllers/auth_controller.dart';
+import '../controllers/layout_controller.dart';
+import 'home_page.dart';
+import 'login_or_signup.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -10,6 +12,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.put(AuthController());
+    Get.put(LayoutController());
 
     return Obx(() => authController.isUserLoggedIn.value
         ? const HomePage()

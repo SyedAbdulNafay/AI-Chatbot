@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:herbertai/controllers/auth_controller.dart';
 
 import '../controllers/home_controller.dart';
 import '../controllers/layout_controller.dart';
@@ -15,7 +14,6 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
     final HomeController homeController = Get.put(HomeController());
-    // final AuthController authController = Get.find();
 
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,

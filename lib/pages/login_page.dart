@@ -5,15 +5,14 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/layout_controller.dart';
 import '../services/widgets/my_textfield.dart';
-import '../services/widgets/socials_button.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
-    final AuthController authController = Get.put(AuthController());
+    final LayoutController layoutController = Get.find();
+    final AuthController authController = Get.find();
 
     return Scaffold(
       backgroundColor: Get.theme.colorScheme.surface,

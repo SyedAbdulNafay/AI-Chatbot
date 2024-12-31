@@ -24,9 +24,7 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
     return Scaffold(
       appBar: AppBar(
         title: Obx(
-          () => Text(_controller.currentTheme.value == ThemeMode.dark
-              ? "Dark Theme"
-              : "Light Theme"),
+          () => Text(Get.isDarkMode ? "Dark Theme" : "Light Theme"),
         ),
       ),
       body: Center(

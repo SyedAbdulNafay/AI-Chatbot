@@ -10,7 +10,7 @@ import '../pages/signup/signup_password_page.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  UserCredential? userCredential;
+  UserCredential? _userCredential;
 
   // form keys
   final loginFormKey = GlobalKey<FormState>();
@@ -119,7 +119,7 @@ class AuthController extends GetxController {
       isSigningIn.value = true;
 
       try {
-        userCredential = await auth.createUserWithEmailAndPassword(
+        _userCredential = await auth.createUserWithEmailAndPassword(
             email: emailController.text.trim(),
             password: passwordController.text.trim());
 
@@ -174,13 +174,13 @@ class AuthController extends GetxController {
   }
 
   Future<void> createUserDocument() async {
-    if (userCredential != null && userCredential?.user != null) {
+    if (_userCredential != null && _userCredential?.user != null) {
       await FirebaseFirestore.instance
           .collection("Users")
-          .doc(userCredential?.user!.uid)
+          .doc(_userCredential?.user!.uid)
           .set({
-        'userId': userCredential?.user!.uid,
-        'email': userCredential?.user!.email,
+        'userId': _userCredential?.user!.uid,
+        'email': _userCredential?.user!.email,
         'username': usernameController.text,
         'bio': 'Empty bio...',
         'profilePicture': 'not selected'

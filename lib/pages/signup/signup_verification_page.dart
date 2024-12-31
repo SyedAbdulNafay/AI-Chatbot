@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herbertai/pages/home_page.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../controllers/layout_controller.dart';
 import '../../services/widgets/authen_button.dart';
+import '../home_page.dart';
 
 class SignupVerificationPage extends StatelessWidget {
   const SignupVerificationPage({super.key});

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:herbertai/pages/signup/signup_verification_page.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../controllers/layout_controller.dart';
 import '../../services/widgets/authen_button.dart';
 import '../../services/widgets/my_textfield.dart';
+import 'signup_verification_page.dart';
 
 class SignupPasswordPage extends StatelessWidget {
   const SignupPasswordPage({super.key});
