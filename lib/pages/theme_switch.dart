@@ -41,7 +41,7 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
               () => Switch(
                 value: _controller.currentTheme.value == ThemeMode.dark,
                 onChanged: (value) {
-                  _controller.switchTheme();
+                  // _controller.switchTheme();
                   Get.changeThemeMode(_controller.currentTheme.value);
                 },
                 activeColor: Get.theme.colorScheme.primary,

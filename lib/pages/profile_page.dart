@@ -21,7 +21,9 @@ class ProfilePage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(CupertinoIcons.back),
             color: Theme.of(context).colorScheme.inversePrimary,
-            onPressed: () => Get.back(),
+            onPressed: () {
+              Get.back();
+            },
           ),
           title: Text(
             "Profile & Settings",
@@ -82,8 +84,6 @@ class ProfilePage extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [
-                            // Get.context!.theme.colorScheme.primary,
-                            // Get.context!.theme.colorScheme.secondary,
                             Theme.of(context).colorScheme.primary,
                             Theme.of(context).colorScheme.secondary,
                           ]),

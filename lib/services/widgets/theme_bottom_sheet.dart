@@ -1,3 +1,4 @@
+import 'package:ai_chatbot/services/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class ThemeBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
-    final HomeController homeController = Get.put(HomeController());
+    final HomeController homeController = Get.find();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -41,16 +42,16 @@ class ThemeBottomSheet extends StatelessWidget {
           itemCount: themes.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () {
+              onTap: () async {
                 switch (themes[index]) {
                   case "Light":
-                    homeController.switchTheme();
-                    Get.changeThemeMode(homeController.currentTheme.value);
+                    Get.changeTheme(CustomTheme.lightTheme);
+                    await homeController.switchToLightMode();
                     Get.back();
                     break;
                   case "Dark":
-                    homeController.switchTheme();
-                    Get.changeThemeMode(homeController.currentTheme.value);
+                    Get.changeTheme(CustomTheme.darkTheme);
+                    await homeController.switchToDarkMode();
                     Get.back();
                     break;
                   default:
