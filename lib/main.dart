@@ -11,20 +11,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: CustomTheme.lightTheme,
-      darkTheme: CustomTheme.darkTheme,
-      // themeMode: Get.isDarkMode ? ThemeMode.light : ThemeMode.light,
-      home: const AuthPage(),
-    );
-  }
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: CustomTheme.lightTheme,
+    darkTheme: CustomTheme.darkTheme,
+    themeMode: Get.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+    home: const AuthPage(),
+  ));
 }

@@ -1,3 +1,4 @@
+import 'package:ai_chatbot/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,6 @@ class HomePage extends StatelessWidget {
     final HomeController homeController = Get.put(HomeController());
 
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.surface,
       body: SafeArea(
         child: LayoutBuilder(builder: (context, constraints) {
           double screenWidth = constraints.maxWidth;
@@ -42,16 +42,22 @@ class HomePage extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Get.theme.colorScheme.tertiary
-                                      .withOpacity(0.28)),
-                              child: Icon(
-                                Icons.person,
-                                color: Get.theme.colorScheme.tertiary,
-                                size: 40,
+                            GestureDetector(
+                              onTap: () => Get.to(
+                                () => const ProfilePage(),
+                                transition: Transition.rightToLeft,
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Get.theme.colorScheme.tertiary
+                                        .withOpacity(0.28)),
+                                child: Icon(
+                                  Icons.person,
+                                  color: Get.theme.colorScheme.tertiary,
+                                  size: 40,
+                                ),
                               ),
                             )
                           ],
@@ -77,7 +83,7 @@ class HomePage extends StatelessWidget {
                               text: 'Chatbot AI',
                               gradient: LinearGradient(
                                   colors: [
-                                    Get.theme.colorScheme.primary,
+                                    Theme.of(context).colorScheme.primary,
                                     Get.theme.colorScheme.secondary,
                                   ],
                                   begin: Alignment.bottomLeft,
@@ -101,7 +107,8 @@ class HomePage extends StatelessWidget {
                                       bottomRight: Radius.circular(8))),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.add),
+                                  Icon(Icons.add,
+                                      color: Get.theme.colorScheme.surface),
                                   SizedBox(
                                     width: layoutController.responsiveWidth(
                                         4, screenWidth),

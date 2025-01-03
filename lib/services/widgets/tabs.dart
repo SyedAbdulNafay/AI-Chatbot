@@ -105,7 +105,7 @@ class Tab extends StatelessWidget {
             border: Border.all(
                 color: isSelected
                     ? Get.theme.colorScheme.tertiary.withOpacity(0.28)
-                    : Get.theme.colorScheme.inversePrimary),
+                    : Get.theme.colorScheme.outline),
             borderRadius: BorderRadius.circular(32),
             color: isSelected
                 ? Get.theme.colorScheme.inversePrimary

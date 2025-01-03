@@ -17,11 +17,11 @@ class ProfilePage extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Get.theme.colorScheme.surface,
         appBar: AppBar(
-          leading: Icon(
-            CupertinoIcons.back,
-            color: Get.theme.colorScheme.inversePrimary,
+          leading: IconButton(
+            icon: const Icon(CupertinoIcons.back),
+            color: Theme.of(context).colorScheme.inversePrimary,
+            onPressed: () => Get.back(),
           ),
           title: Text(
             "Profile & Settings",
@@ -82,8 +82,10 @@ class ProfilePage extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                           gradient: LinearGradient(colors: [
-                            Get.theme.colorScheme.primary,
-                            Get.theme.colorScheme.secondary,
+                            // Get.context!.theme.colorScheme.primary,
+                            // Get.context!.theme.colorScheme.secondary,
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
                           ]),
                           borderRadius: BorderRadius.circular(25)),
                       child: Row(
