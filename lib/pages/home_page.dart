@@ -7,6 +7,7 @@ import '../controllers/layout_controller.dart';
 import '../services/widgets/chat_card.dart';
 import '../services/widgets/gradient_text.dart';
 import '../services/widgets/tabs.dart';
+import 'chat_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -91,35 +92,38 @@ class HomePage extends StatelessWidget {
                               style: const TextStyle(
                                   fontFamily: 'HeadingFont', fontSize: 35),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: layoutController.responsiveWidth(
-                                    24, screenWidth),
-                                vertical: layoutController.responsiveHeight(
-                                    18, screenHeight),
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Get.theme.colorScheme.primary,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(36),
-                                      topRight: Radius.circular(36),
-                                      bottomLeft: Radius.circular(36),
-                                      bottomRight: Radius.circular(8))),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.add,
-                                      color: Get.theme.colorScheme.surface),
-                                  SizedBox(
-                                    width: layoutController.responsiveWidth(
-                                        4, screenWidth),
-                                  ),
-                                  Text(
-                                    "New Topic",
-                                    style: TextStyle(
-                                        color: Get.theme.colorScheme.surface,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                            GestureDetector(
+                              onTap: () => Get.to(() => const ChatPage()),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: layoutController.responsiveWidth(
+                                      24, screenWidth),
+                                  vertical: layoutController.responsiveHeight(
+                                      18, screenHeight),
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Get.theme.colorScheme.primary,
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(36),
+                                        topRight: Radius.circular(36),
+                                        bottomLeft: Radius.circular(36),
+                                        bottomRight: Radius.circular(8))),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.add,
+                                        color: Get.theme.colorScheme.surface),
+                                    SizedBox(
+                                      width: layoutController.responsiveWidth(
+                                          4, screenWidth),
+                                    ),
+                                    Text(
+                                      "New Topic",
+                                      style: TextStyle(
+                                          color: Get.theme.colorScheme.surface,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

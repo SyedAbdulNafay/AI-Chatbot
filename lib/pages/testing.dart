@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../services/open_ai_service.dart';
+import '../models/open_ai_service.dart';
 
 class Testing extends StatelessWidget {
   const Testing({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final OpenAIService aiService = OpenAIService();
+    final OpenAIModel aiService = OpenAIModel();
     final TextEditingController controller = TextEditingController();
 
     return SafeArea(

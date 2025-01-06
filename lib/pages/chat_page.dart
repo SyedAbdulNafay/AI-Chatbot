@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -24,7 +25,7 @@ class ChatPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Get.theme.colorScheme.surface,
             leading: IconButton(
-              onPressed: () {},
+              onPressed: () => Get.back(),
               icon: Icon(
                 CupertinoIcons.back,
                 color: Get.theme.colorScheme.inversePrimary,
@@ -70,42 +71,101 @@ class ChatPage extends StatelessWidget {
               ],
             ),
           ),
-          body: Padding(
-            padding: EdgeInsets.only(
-              left: layoutController.responsiveWidth(24, screenWidth),
-              right: layoutController.responsiveWidth(24, screenWidth),
-              bottom: layoutController.responsiveHeight(24, screenHeight),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                    child: ListView.builder(
-                  itemCount: chatController.value.value,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      height: 100,
-                      width: 100,
-                      color: Get.theme.colorScheme.primary,
-                    );
-                  },
-                )),
-                // AnimatedTextKit(
-                //   isRepeatingAnimation: false,
-                //   animatedTexts: [
-                //     TypewriterAnimatedText(
-                //       'How may I help you today?',
-                //       textStyle: const TextStyle(
-                //         fontSize: 25,
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //       speed: const Duration(milliseconds: 50),
-                //     )
-                //   ],
-                // ),
-                Row(
+          body: Column(
+            children: [
+              Obx(() => chatController.messages['user']!.isEmpty &&
+                      chatController.messages['ai']!.isEmpty
+                  ? Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: layoutController.responsiveHeight(
+                                screenHeight / 2, screenHeight)),
+                        child: AnimatedTextKit(
+                          isRepeatingAnimation: false,
+                          animatedTexts: [
+                            TypewriterAnimatedText(
+                              'How may I help you today?',
+                              textStyle: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              speed: const Duration(milliseconds: 50),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: chatController.messages['user']!.length +
+                            chatController.messages['ai']!.length,
+                        itemBuilder: (context, index) {
+                          
+                          return Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: layoutController.responsiveWidth(
+                                    24, screenWidth),
+                                vertical: layoutController.responsiveHeight(
+                                    24, screenHeight)),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    top: BorderSide(
+                                        color: Get.theme.colorScheme.tertiary
+                                            .withOpacity(0.28)))),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(layoutController
+                                          .responsiveHeight(10, screenHeight)),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Get.theme.colorScheme.primary,
+                                      ),
+                                      child: Text(
+                                        "S",
+                                        style: TextStyle(
+                                          color: Get.theme.colorScheme.surface,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: layoutController.responsiveWidth(
+                                          12, screenWidth),
+                                    ),
+                                    Text(
+                                      "You",
+                                      style: TextStyle(
+                                        color: Get
+                                            .theme.colorScheme.inversePrimary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: layoutController.responsiveWidth(24, screenWidth),
+                  right: layoutController.responsiveWidth(24, screenWidth),
+                  bottom: layoutController.responsiveHeight(24, screenHeight),
+                ),
+                child: Row(
                   children: [
                     Expanded(
                         child: TextField(
+                      onChanged: (value) {
+                        chatController.userPrompt.value = value;
+                      },
+                      controller: chatController.textController,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           horizontal:
@@ -144,11 +204,14 @@ class ChatPage extends StatelessWidget {
                     SizedBox(
                       width: layoutController.responsiveWidth(12, screenWidth),
                     ),
-                    const SendButton()
+                    Obx(() => SendButton(
+                          onTap: () => chatController.onSend(),
+                          disabled: chatController.userPrompt.value == "",
+                        )),
                   ],
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         );
       }),

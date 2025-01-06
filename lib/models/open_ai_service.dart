@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-import 'const.dart';
+import '../services/const.dart';
 
-class OpenAIService {
+class OpenAIModel {
   final model = GenerativeModel(
     model: 'gemini-1.5-flash-latest',
     apiKey: apiKey,
   );
 
-  Future<void> generateResponse(String userInput) async {
+  Future<String?> generateResponse(String userInput) async {
     final content = [Content.text(userInput)];
     final response = await model.generateContent(content);
-    debugPrint(response.text);
+    return response.text;
   }
 }

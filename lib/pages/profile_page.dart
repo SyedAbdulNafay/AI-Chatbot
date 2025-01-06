@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LayoutController layoutController = Get.put(LayoutController());
+    final LayoutController layoutController = Get.find();
     final ProfileController profileController = Get.put(ProfileController());
 
     return SafeArea(
