@@ -1,6 +1,8 @@
+import 'package:ai_chatbot/models/message.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -31,50 +33,27 @@ class ChatPage extends StatelessWidget {
                 color: Get.theme.colorScheme.inversePrimary,
               ),
             ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Get.theme.colorScheme.inversePrimary,
-                      ),
-                      child: Icon(
-                        Icons.gamepad,
-                        color: Get.theme.colorScheme.surface,
-                        size: 25,
-                      ),
-                    ),
-                    SizedBox(
-                      width: layoutController.responsiveWidth(16, screenWidth),
-                    ),
-                    Text(
-                      "Chat Bot AI 4.5",
-                      style: TextStyle(
-                          fontFamily: "SecondHeadingFont",
-                          fontSize: 20,
-                          color: Get.theme.colorScheme.inversePrimary),
-                    )
-                  ],
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.ios_share,
-                    color: Get.theme.colorScheme.tertiary,
-                    size: 24,
-                  ),
-                ),
-              ],
+            title: Text(
+              "Chat Bot AI 4.5",
+              style: TextStyle(
+                  fontFamily: "SecondHeadingFont",
+                  fontSize: 20,
+                  color: Get.theme.colorScheme.inversePrimary),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.ios_share,
+                  color: Get.theme.colorScheme.inversePrimary,
+                  size: 24,
+                ),
+              ),
+            ],
           ),
           body: Column(
             children: [
-              Obx(() => chatController.messages['user']!.isEmpty &&
-                      chatController.messages['ai']!.isEmpty
+              Obx(() => chatController.messages.isEmpty
                   ? Expanded(
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -89,7 +68,7 @@ class ChatPage extends StatelessWidget {
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                               ),
-                              speed: const Duration(milliseconds: 50),
+                              speed: const Duration(milliseconds: 80),
                             )
                           ],
                         ),
@@ -97,10 +76,11 @@ class ChatPage extends StatelessWidget {
                     )
                   : Expanded(
                       child: ListView.builder(
-                        itemCount: chatController.messages['user']!.length +
-                            chatController.messages['ai']!.length,
+                        controller: chatController.scrollController,
+                        itemCount: chatController.messages.length,
                         itemBuilder: (context, index) {
-                          
+                          Message message = chatController.messages[index];
+
                           return Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: layoutController.responsiveWidth(
@@ -113,6 +93,7 @@ class ChatPage extends StatelessWidget {
                                         color: Get.theme.colorScheme.tertiary
                                             .withOpacity(0.28)))),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
@@ -121,10 +102,13 @@ class ChatPage extends StatelessWidget {
                                           .responsiveHeight(10, screenHeight)),
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: Get.theme.colorScheme.primary,
+                                        color: message.sentBy == "user"
+                                            ? Get.theme.colorScheme.primary
+                                            : Get.theme.colorScheme
+                                                .inversePrimary,
                                       ),
                                       child: Text(
-                                        "S",
+                                        message.sentBy == "user" ? "U" : "A",
                                         style: TextStyle(
                                           color: Get.theme.colorScheme.surface,
                                           fontSize: 16,
@@ -136,13 +120,104 @@ class ChatPage extends StatelessWidget {
                                           12, screenWidth),
                                     ),
                                     Text(
-                                      "You",
+                                      message.sentBy == "user"
+                                          ? "You"
+                                          : "Chat Bot AI 4.5",
                                       style: TextStyle(
                                         color: Get
                                             .theme.colorScheme.inversePrimary,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: layoutController
+                                          .responsiveHeight(16, screenHeight)),
+                                  child: Obx(() => message.message.value == null
+                                      ? Row(
+                                          children: [
+                                            SpinKitThreeBounce(
+                                              color: Get.theme.colorScheme
+                                                  .inversePrimary,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        )
+                                      : (message.sentBy == "user"
+                                          ? Text(
+                                              message.message.value!,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Get
+                                                    .theme.colorScheme.primary,
+                                              ),
+                                            )
+                                          : AnimatedTextKit(
+                                              isRepeatingAnimation: false,
+                                              animatedTexts: [
+                                                TypewriterAnimatedText(
+                                                  message.message.value!,
+                                                  textStyle: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Get.theme.colorScheme
+                                                        .inversePrimary,
+                                                  ),
+                                                  speed: const Duration(
+                                                      milliseconds: 70),
+                                                )
+                                              ],
+                                            ))),
+                                ),
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svgs/Edit-Square.svg',
+                                          colorFilter: ColorFilter.mode(
+                                            Get.theme.colorScheme.tertiary,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: layoutController
+                                              .responsiveWidth(8, screenWidth),
+                                        ),
+                                        Text(
+                                          "Edit",
+                                          style: TextStyle(
+                                              color: Get
+                                                  .theme.colorScheme.tertiary),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: layoutController.responsiveWidth(
+                                          24, screenWidth),
+                                    ),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svgs/Copy-Icon.svg',
+                                          colorFilter: ColorFilter.mode(
+                                            Get.theme.colorScheme.tertiary,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: layoutController
+                                              .responsiveWidth(8, screenWidth),
+                                        ),
+                                        Text(
+                                          "Copy",
+                                          style: TextStyle(
+                                              color: Get
+                                                  .theme.colorScheme.tertiary),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 )
@@ -205,7 +280,12 @@ class ChatPage extends StatelessWidget {
                       width: layoutController.responsiveWidth(12, screenWidth),
                     ),
                     Obx(() => SendButton(
-                          onTap: () => chatController.onSend(),
+                          onTap: () async {
+                            await chatController.onSend();
+                            chatController.scrollController.jumpTo(
+                                chatController
+                                    .scrollController.position.maxScrollExtent);
+                          },
                           disabled: chatController.userPrompt.value == "",
                         )),
                   ],
