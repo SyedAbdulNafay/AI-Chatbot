@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../models/open_ai_service.dart';
+import '../models/open_ai_model.dart';
 
 class Testing extends StatelessWidget {
   const Testing({super.key});

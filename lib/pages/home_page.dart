@@ -1,3 +1,4 @@
+import 'package:ai_chatbot/controllers/chat_controller.dart';
 import 'package:ai_chatbot/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,10 +17,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
     final HomeController homeController = Get.put(HomeController());
+    final ChatController chatController = Get.put(ChatController());
 
-    return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(builder: (context, constraints) {
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(builder: (context, constraints) {
           double screenWidth = constraints.maxWidth;
           double screenHeight = constraints.maxHeight;
 
@@ -28,45 +30,18 @@ class HomePage extends StatelessWidget {
             slivers: [
               SliverAppBar(
                 backgroundColor: Get.theme.colorScheme.surface,
-                expandedHeight: 255,
+                expandedHeight: 210,
                 flexibleSpace: FlexibleSpaceBar(
                   background: Padding(
                     padding: EdgeInsets.only(
                       left: layoutController.responsiveWidth(24, screenWidth),
                       right: layoutController.responsiveWidth(24, screenWidth),
-                      top: layoutController.responsiveWidth(12, screenWidth),
+                      top: layoutController.responsiveWidth(24, screenWidth),
                       bottom: layoutController.responsiveWidth(32, screenWidth),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () => Get.to(
-                                () => const ProfilePage(),
-                                transition: Transition.rightToLeft,
-                              ),
-                              child: Container(
-                                padding: const EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Get.theme.colorScheme.tertiary
-                                        .withOpacity(0.28)),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Get.theme.colorScheme.tertiary,
-                                  size: 40,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: layoutController.responsiveHeight(
-                              12, screenHeight),
-                        ),
                         const Text(
                           "Start a new chat",
                           style: TextStyle(
@@ -135,7 +110,8 @@ class HomePage extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Divider(
-                  color: Get.theme.colorScheme.tertiary.withOpacity(0.28),
+                  color: Get.theme.colorScheme.tertiary.withOpacity(
+                      layoutController.isDarkMode.value ? 1 : 0.28),
                 ),
               ),
               SliverPersistentHeader(
@@ -172,14 +148,33 @@ class HomePage extends StatelessWidget {
                                   child: TextField(
                                     controller: homeController.searchController,
                                     decoration: InputDecoration(
-                                      suffixIcon: Icon(
-                                        Icons.search,
-                                        color: Get.theme.colorScheme.tertiary,
+                                      suffixIcon: GestureDetector(
+                                        onTap: () => Get.to(
+                                          () => const ProfilePage(),
+                                          transition: Transition.rightToLeft,
+                                        ),
+                                        child: Container(
+                                          margin: const EdgeInsets.only(
+                                            top: 1,
+                                            bottom: 1,
+                                            right: 12,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Get
+                                                  .theme.colorScheme.tertiary
+                                                  .withOpacity(0.28)),
+                                          child: Icon(
+                                            Icons.person,
+                                            color:
+                                                Get.theme.colorScheme.tertiary,
+                                          ),
+                                        ),
                                       ),
                                       hintStyle: TextStyle(
                                           color: Get.theme.colorScheme.tertiary,
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w700),
+                                          fontWeight: FontWeight.bold),
                                       hintText: "Search...",
                                       focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -209,78 +204,80 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   )),
-              SliverCrossAxisGroup(
-                slivers: [
-                  SliverList.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left:
-                              layoutController.responsiveWidth(8, screenWidth),
-                          right:
-                              layoutController.responsiveWidth(4, screenWidth),
-                          top: layoutController.responsiveHeight(
-                              8, screenHeight),
-                        ),
-                        child: ChatCard(
-                          screenHeight: screenHeight,
-                          screenWidth: screenWidth,
-                          chatTitle: "How can I forget a bad memory?",
-                          content:
-                              "Forgetting a bad memory entirely may be challenging, as memories are complex and deeply ingrained into the mind.",
-                          time: "28 mins ago",
-                        ),
-                      );
-                    },
-                  ),
-                  SliverList.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right:
-                              layoutController.responsiveWidth(8, screenWidth),
-                          left:
-                              layoutController.responsiveWidth(4, screenWidth),
-                          top: layoutController.responsiveHeight(
-                              8, screenHeight),
-                        ),
-                        child: ChatCard(
-                          screenHeight: screenHeight,
-                          screenWidth: screenWidth,
-                          chatTitle: "How can I forget a bad memory?",
-                          content:
-                              "Forgetting a bad memory entirely may be challenging, as memories are complex and deeply ingrained into the mind.",
-                          time: "28 mins ago",
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              )
+              Obx(() => SliverCrossAxisGroup(
+                    slivers: [
+                      SliverList.builder(
+                        itemCount: chatController.chats.length,
+                        itemBuilder: (context, index) {
+                          if (index % 2 == 1) return const SizedBox();
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: layoutController.responsiveWidth(
+                                  8, screenWidth),
+                              right: layoutController.responsiveWidth(
+                                  4, screenWidth),
+                              top: layoutController.responsiveHeight(
+                                  8, screenHeight),
+                            ),
+                            child: ChatCard(
+                              onTap: () {
+                                chatController.currentChatId =
+                                    chatController.chats[index].chatId;
+                                chatController.messages.value =
+                                    chatController.chats[index].messages;
+                                Get.to(() => const ChatPage());
+                              },
+                              screenHeight: screenHeight,
+                              screenWidth: screenWidth,
+                              chat: chatController.chats[index],
+                            ),
+                          );
+                        },
+                      ),
+                      SliverList.builder(
+                        itemCount: chatController.chats.length,
+                        itemBuilder: (context, index) {
+                          if (index % 2 == 0) return const SizedBox();
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              right: layoutController.responsiveWidth(
+                                  8, screenWidth),
+                              left: layoutController.responsiveWidth(
+                                  4, screenWidth),
+                              top: layoutController.responsiveHeight(
+                                  8, screenHeight),
+                            ),
+                            child: ChatCard(
+                                screenHeight: screenHeight,
+                                screenWidth: screenWidth,
+                                chat: chatController.chats[index]),
+                          );
+                        },
+                      ),
+                    ],
+                  ))
             ],
           );
         }),
-      ),
-      floatingActionButton: Obx(() => Opacity(
-            opacity: (homeController.shrinkOffset.value) / (170.0),
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Get.theme.colorScheme.primary,
-                ),
-                child: Icon(
-                  Icons.add,
-                  color: Get.theme.colorScheme.surface,
-                  size: 42,
+        floatingActionButton: Obx(() => Opacity(
+              opacity: (homeController.shrinkOffset.value) / (170.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Get.theme.colorScheme.primary,
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    color: Get.theme.colorScheme.surface,
+                    size: 42,
+                  ),
                 ),
               ),
-            ),
-          )),
+            )),
+      ),
     );
   }
 }

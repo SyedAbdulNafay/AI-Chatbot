@@ -4,7 +4,7 @@ import '../services/const.dart';
 
 class OpenAIModel {
   final model = GenerativeModel(
-    model: 'gemini-1.5-flash-latest',
+    model: 'gemini-1.5-pro',
     apiKey: apiKey,
   );
 

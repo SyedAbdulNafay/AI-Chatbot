@@ -5,9 +5,10 @@ import '../services/widgets/email_bottom_sheet.dart';
 import '../services/widgets/theme_bottom_sheet.dart';
 
 class ProfileController extends GetxController {
+  var whichTheme = "System Default";
   Map<String, String?> settings = {
     "Email": FirebaseAuth.instance.currentUser?.email ?? "",
-    "Theme": "System Default",
+    "Theme": null,
     "Data & Storage": "0% Used",
     "Change Password": null,
     "Send feedback": null,

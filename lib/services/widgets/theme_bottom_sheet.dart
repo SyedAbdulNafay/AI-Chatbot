@@ -1,3 +1,4 @@
+import 'package:ai_chatbot/controllers/profile_controller.dart';
 import 'package:ai_chatbot/services/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class ThemeBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
     final HomeController homeController = Get.find();
+    final ProfileController profileController = Get.find();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -45,12 +47,16 @@ class ThemeBottomSheet extends StatelessWidget {
               onTap: () async {
                 switch (themes[index]) {
                   case "Light":
+                    profileController.whichTheme = "Light";
                     Get.changeTheme(CustomTheme.lightTheme);
+                    layoutController.isDarkMode.value = false;
                     await homeController.switchToLightMode();
                     Get.back();
                     break;
                   case "Dark":
+                    profileController.whichTheme = "Dark";
                     Get.changeTheme(CustomTheme.darkTheme);
+                    layoutController.isDarkMode.value = true;
                     await homeController.switchToDarkMode();
                     Get.back();
                     break;

@@ -1,3 +1,4 @@
+import 'package:ai_chatbot/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +19,7 @@ class EmailBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
+    final AuthController authController = Get.find();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -42,6 +44,10 @@ class EmailBottomSheet extends StatelessWidget {
             return SettingsBar(
                 screenHeight: screenHeight,
                 screenWidth: screenWidth,
+                onPressed: () async {
+                  await authController.signOut();
+                  Get.back();
+                },
                 leading: Text(
                   options[index],
                   style: TextStyle(

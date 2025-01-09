@@ -16,7 +16,7 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
-    final ChatController chatController = Get.put(ChatController());
+    final ChatController chatController = Get.find();
 
     return SafeArea(
       child: LayoutBuilder(builder: (context, constraints) {
@@ -27,7 +27,11 @@ class ChatPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Get.theme.colorScheme.surface,
             leading: IconButton(
-              onPressed: () => Get.back(),
+              onPressed: () {
+                chatController.currentChatId = '';
+                // chatController.messages.clear();
+                Get.back();
+              },
               icon: Icon(
                 CupertinoIcons.back,
                 color: Get.theme.colorScheme.inversePrimary,
@@ -251,7 +255,7 @@ class ChatPage extends StatelessWidget {
                         suffixIcon: IconButton(
                             onPressed: () {},
                             icon: SvgPicture.asset(
-                              'assets/svgs/select_image_vector.svg',
+                              'assets/svgs/select-image-vector.svg',
                               colorFilter: ColorFilter.mode(
                                 Get.theme.colorScheme.tertiary,
                                 BlendMode.srcIn,

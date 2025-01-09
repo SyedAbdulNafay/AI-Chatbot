@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
@@ -21,11 +22,13 @@ class Tabs extends StatelessWidget {
               children: [
                 Tab(
                   text: "Chats",
-                  icon: Icon(
-                    Icons.chat_outlined,
-                    color: homeController.selectedTab.value == 1
-                        ? Get.theme.colorScheme.surface
-                        : Get.theme.colorScheme.inversePrimary,
+                  icon: SvgPicture.asset(
+                    'assets/svgs/chat-tab-vector.svg',
+                    colorFilter: ColorFilter.mode(
+                        homeController.selectedTab.value == 1
+                            ? Get.theme.colorScheme.surface
+                            : Get.theme.colorScheme.inversePrimary,
+                        BlendMode.srcIn),
                   ),
                   isSelected: homeController.selectedTab.value == 1,
                   screenWidth: screenWidth,
@@ -36,11 +39,14 @@ class Tabs extends StatelessWidget {
                 ),
                 Tab(
                   text: "Archived",
-                  icon: Icon(
-                    Icons.archive_outlined,
-                    color: homeController.selectedTab.value == 2
-                        ? Get.theme.colorScheme.surface
-                        : Get.theme.colorScheme.inversePrimary,
+                  icon: SvgPicture.asset(
+                    'assets/svgs/archive-tab-vector.svg',
+                    colorFilter: ColorFilter.mode(
+                      homeController.selectedTab.value == 2
+                          ? Get.theme.colorScheme.surface
+                          : Get.theme.colorScheme.inversePrimary,
+                      BlendMode.srcIn,
+                    ),
                   ),
                   isSelected: homeController.selectedTab.value == 2,
                   screenWidth: screenWidth,
@@ -51,11 +57,14 @@ class Tabs extends StatelessWidget {
                 ),
                 Tab(
                   text: "Images",
-                  icon: Icon(
-                    Icons.image_outlined,
-                    color: homeController.selectedTab.value == 3
-                        ? Get.theme.colorScheme.surface
-                        : Get.theme.colorScheme.inversePrimary,
+                  icon: SvgPicture.asset(
+                    'assets/svgs/select-image-vector.svg',
+                    colorFilter: ColorFilter.mode(
+                      homeController.selectedTab.value == 3
+                          ? Get.theme.colorScheme.surface
+                          : Get.theme.colorScheme.inversePrimary,
+                      BlendMode.srcIn,
+                    ),
                   ),
                   isSelected: homeController.selectedTab.value == 3,
                   screenWidth: screenWidth,
@@ -73,7 +82,7 @@ class Tabs extends StatelessWidget {
 
 class Tab extends StatelessWidget {
   final String text;
-  final Icon icon;
+  final Widget icon;
   final bool isSelected;
   final double screenWidth;
   final double screenHeight;

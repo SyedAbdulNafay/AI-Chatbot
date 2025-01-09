@@ -84,6 +84,11 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> signOut() async {
+    isUserLoggedIn.value = false;
+    await auth.signOut();
+  }
+
   Future<void> verifyEmail() async {
     if (signupEmailFormKey.currentState!.validate()) {
       isSigningIn.value = true;

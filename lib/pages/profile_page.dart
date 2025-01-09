@@ -135,8 +135,10 @@ class ProfilePage extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            trailing: profileController.settings.values
-                                .elementAt(index),
+                            trailing: index == 1
+                                ? profileController.whichTheme
+                                : profileController.settings.values
+                                    .elementAt(index),
                             noBorder:
                                 index == profileController.settings.length - 1,
                             onPressed: () => profileController.onPressed(
