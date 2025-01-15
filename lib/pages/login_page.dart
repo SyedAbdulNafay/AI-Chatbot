@@ -165,14 +165,16 @@ class LoginPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 14),
-                          decoration: BoxDecoration(
-                              color: Get.theme.colorScheme.outline,
-                              borderRadius: BorderRadius.circular(16)),
-                          child:
-                              SvgPicture.asset('assets/images/google_logo.svg'),
+                        GestureDetector(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 14),
+                            decoration: BoxDecoration(
+                                color: Get.theme.colorScheme.outline,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: SvgPicture.asset(
+                                'assets/images/google_logo.svg'),
+                          ),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(

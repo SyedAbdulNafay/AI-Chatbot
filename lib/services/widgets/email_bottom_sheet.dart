@@ -46,7 +46,6 @@ class EmailBottomSheet extends StatelessWidget {
                 screenWidth: screenWidth,
                 onPressed: () async {
                   await authController.signOut();
-                  Get.back();
                 },
                 leading: Text(
                   options[index],

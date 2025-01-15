@@ -62,7 +62,7 @@ class AuthController extends GetxController {
       try {
         final query = FirebaseFirestore.instance
             .collection("Users")
-            .where("email", isEqualTo: emailController.text);
+            .where("email", isEqualTo: emailController.text.trim());
         final querysnapshot = await query.get();
 
         if (querysnapshot.docs.isEmpty) {
@@ -87,6 +87,7 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     isUserLoggedIn.value = false;
     await auth.signOut();
+    Get.close(2);
   }
 
   Future<void> verifyEmail() async {
@@ -186,9 +187,6 @@ class AuthController extends GetxController {
           .set({
         'userId': _userCredential?.user!.uid,
         'email': _userCredential?.user!.email,
-        'username': usernameController.text,
-        'bio': 'Empty bio...',
-        'profilePicture': 'not selected'
       });
     }
   }

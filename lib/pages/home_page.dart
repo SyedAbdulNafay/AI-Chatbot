@@ -1,7 +1,9 @@
 import 'package:ai_chatbot/controllers/chat_controller.dart';
 import 'package:ai_chatbot/pages/profile_page.dart';
+import 'package:ai_chatbot/services/widgets/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../controllers/home_controller.dart';
 import '../controllers/layout_controller.dart';
@@ -207,7 +209,9 @@ class HomePage extends StatelessWidget {
               Obx(() => SliverCrossAxisGroup(
                     slivers: [
                       SliverList.builder(
-                        itemCount: chatController.chats.length,
+                        itemCount: chatController.isLoadingChats.value
+                            ? 6
+                            : chatController.chats.length,
                         itemBuilder: (context, index) {
                           if (index % 2 == 1) return const SizedBox();
                           return Padding(
@@ -219,23 +223,30 @@ class HomePage extends StatelessWidget {
                               top: layoutController.responsiveHeight(
                                   8, screenHeight),
                             ),
-                            child: ChatCard(
-                              onTap: () {
-                                chatController.currentChatId =
-                                    chatController.chats[index].chatId;
-                                chatController.messages.value =
-                                    chatController.chats[index].messages;
-                                Get.to(() => const ChatPage());
-                              },
-                              screenHeight: screenHeight,
-                              screenWidth: screenWidth,
-                              chat: chatController.chats[index],
-                            ),
+                            child: chatController.isLoadingChats.value
+                                ? ShimmerContainer(
+                                    screenHeight: screenHeight,
+                                    screenWidth: screenWidth,
+                                  )
+                                : ChatCard(
+                                    onTap: () {
+                                      chatController.currentChatId =
+                                          chatController.chats[index].chatId;
+                                      chatController.messages.value =
+                                          chatController.chats[index].messages;
+                                      Get.to(() => const ChatPage());
+                                    },
+                                    screenHeight: screenHeight,
+                                    screenWidth: screenWidth,
+                                    chat: chatController.chats[index],
+                                  ),
                           );
                         },
                       ),
                       SliverList.builder(
-                        itemCount: chatController.chats.length,
+                        itemCount: chatController.isLoadingChats.value
+                            ? 6
+                            : chatController.chats.length,
                         itemBuilder: (context, index) {
                           if (index % 2 == 0) return const SizedBox();
                           return Padding(
@@ -247,10 +258,15 @@ class HomePage extends StatelessWidget {
                               top: layoutController.responsiveHeight(
                                   8, screenHeight),
                             ),
-                            child: ChatCard(
-                                screenHeight: screenHeight,
-                                screenWidth: screenWidth,
-                                chat: chatController.chats[index]),
+                            child: chatController.isLoadingChats.value
+                                ? ShimmerContainer(
+                                    screenHeight: screenHeight,
+                                    screenWidth: screenWidth,
+                                  )
+                                : ChatCard(
+                                    screenHeight: screenHeight,
+                                    screenWidth: screenWidth,
+                                    chat: chatController.chats[index]),
                           );
                         },
                       ),

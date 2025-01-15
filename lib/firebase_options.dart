@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:161260576816:android:570a995f692de9ea210df5',
     messagingSenderId: '161260576816',
     projectId: 'ai-chatbot-505a7',
-    storageBucket: 'ai-chatbot-505a7.appspot.com',
+    storageBucket: 'ai-chatbot-505a7.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +62,10 @@ class DefaultFirebaseOptions {
     appId: '1:161260576816:ios:af2de013349af0ed210df5',
     messagingSenderId: '161260576816',
     projectId: 'ai-chatbot-505a7',
-    storageBucket: 'ai-chatbot-505a7.appspot.com',
+    storageBucket: 'ai-chatbot-505a7.firebasestorage.app',
+    androidClientId: '161260576816-3a6cr6minc4r98s02b51m8kjqogj06if.apps.googleusercontent.com',
+    iosClientId: '161260576816-gn0rm4mhjbhh36b3fcgulbtmj162fbi2.apps.googleusercontent.com',
     iosBundleId: 'com.example.aiChatbot',
   );
+
 }

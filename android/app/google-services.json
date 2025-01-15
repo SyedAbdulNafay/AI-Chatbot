@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "161260576816",
     "project_id": "ai-chatbot-505a7",
-    "storage_bucket": "ai-chatbot-505a7.appspot.com"
+    "storage_bucket": "ai-chatbot-505a7.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,20 @@
           "package_name": "com.example.ai_chatbot"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "161260576816-3a6cr6minc4r98s02b51m8kjqogj06if.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ai_chatbot",
+            "certificate_hash": "b626c0586c676f758e50e006829af1b2a943073a"
+          }
+        },
+        {
+          "client_id": "161260576816-6p9g7dmhbn0hl3lecp4r4c28o3o988ob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA0jy63kR8Ya33HE2LwFwCajnogVg-zRwo"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "161260576816-6p9g7dmhbn0hl3lecp4r4c28o3o988ob.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "161260576816-gn0rm4mhjbhh36b3fcgulbtmj162fbi2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.aiChatbot"
+              }
+            }
+          ]
         }
       }
     }
