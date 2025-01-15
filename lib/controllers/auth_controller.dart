@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../pages/home_page.dart';
 import '../pages/signup/signup_password_page.dart';
@@ -52,6 +53,21 @@ class AuthController extends GetxController {
     int seconds = countdown.value % 60;
 
     return '${minutes.toString().padLeft(1, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  signInWithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+
+    if (gUser == null) return;
+
+    final GoogleSignInAuthentication gAuth = await gUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+
+    return await auth.signInWithCredential(credential);
   }
 
   Future<void> login() async {

@@ -1,9 +1,9 @@
+import 'package:ai_chatbot/controllers/auth_controller.dart';
 import 'package:ai_chatbot/controllers/chat_controller.dart';
 import 'package:ai_chatbot/pages/profile_page.dart';
 import 'package:ai_chatbot/services/widgets/shimmer_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../controllers/home_controller.dart';
 import '../controllers/layout_controller.dart';
@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
+    final AuthController authController = Get.find();
     final HomeController homeController = Get.put(HomeController());
     final ChatController chatController = Get.put(ChatController());
 
@@ -155,23 +156,40 @@ class HomePage extends StatelessWidget {
                                           () => const ProfilePage(),
                                           transition: Transition.rightToLeft,
                                         ),
-                                        child: Container(
-                                          margin: const EdgeInsets.only(
-                                            top: 1,
-                                            bottom: 1,
-                                            right: 12,
-                                          ),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Get
-                                                  .theme.colorScheme.tertiary
-                                                  .withOpacity(0.28)),
-                                          child: Icon(
-                                            Icons.person,
-                                            color:
-                                                Get.theme.colorScheme.tertiary,
-                                          ),
-                                        ),
+                                        child: authController.auth.currentUser
+                                                    ?.photoURL !=
+                                                null
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 1,
+                                                  bottom: 1,
+                                                  right: 12,
+                                                ),
+                                                child: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      authController
+                                                          .auth
+                                                          .currentUser!
+                                                          .photoURL!),
+                                                ),
+                                              )
+                                            : Container(
+                                                margin: const EdgeInsets.only(
+                                                  top: 1,
+                                                  bottom: 1,
+                                                  right: 12,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Get.theme.colorScheme
+                                                        .tertiary
+                                                        .withOpacity(0.28)),
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: Get.theme.colorScheme
+                                                      .tertiary,
+                                                ),
+                                              ),
                                       ),
                                       hintStyle: TextStyle(
                                           color: Get.theme.colorScheme.tertiary,

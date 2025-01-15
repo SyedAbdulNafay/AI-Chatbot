@@ -166,6 +166,7 @@ class LoginPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
+                          onTap: () => authController.signInWithGoogle(),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 24, vertical: 14),
