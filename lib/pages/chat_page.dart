@@ -101,24 +101,40 @@ class ChatPage extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.all(layoutController
-                                          .responsiveHeight(10, screenHeight)),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: message.sentBy == "user"
-                                            ? Get.theme.colorScheme.primary
-                                            : Get.theme.colorScheme
-                                                .inversePrimary,
-                                      ),
-                                      child: Text(
-                                        message.sentBy == "user" ? "U" : "A",
-                                        style: TextStyle(
-                                          color: Get.theme.colorScheme.surface,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
+                                    message.sentBy == "user" &&
+                                            chatController.auth.currentUser
+                                                    ?.photoURL !=
+                                                null
+                                        ? CircleAvatar(
+                                            maxRadius: 15,
+                                            backgroundImage: NetworkImage(
+                                                chatController.auth.currentUser!
+                                                    .photoURL!),
+                                          )
+                                        : Container(
+                                            padding: EdgeInsets.all(
+                                                layoutController
+                                                    .responsiveHeight(
+                                                        10, screenHeight)),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: message.sentBy == "user"
+                                                  ? Get
+                                                      .theme.colorScheme.primary
+                                                  : Get.theme.colorScheme
+                                                      .inversePrimary,
+                                            ),
+                                            child: Text(
+                                              message.sentBy == "user"
+                                                  ? "U"
+                                                  : "A",
+                                              style: TextStyle(
+                                                color: Get
+                                                    .theme.colorScheme.surface,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
                                     SizedBox(
                                       width: layoutController.responsiveWidth(
                                           12, screenWidth),
@@ -170,7 +186,7 @@ class ChatPage extends StatelessWidget {
                                                         .inversePrimary,
                                                   ),
                                                   speed: const Duration(
-                                                      milliseconds: 70),
+                                                      milliseconds: 50),
                                                 )
                                               ],
                                             ))),

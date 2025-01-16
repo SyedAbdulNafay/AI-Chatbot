@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class ChatController extends GetxController {
   final OpenAIModel _aiService = OpenAIModel();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
@@ -24,7 +24,7 @@ class ChatController extends GetxController {
   }
 
   Future<void> saveChatToFirebase(Chat chat) async {
-    final user = _auth.currentUser;
+    final user = auth.currentUser;
     if (user == null) return;
 
     final userChatsRef = _firestore
@@ -39,7 +39,7 @@ class ChatController extends GetxController {
   Future<void> loadChatsFromFirebase() async {
     debugPrint("loading started");
     isLoadingChats.value = true;
-    final user = _auth.currentUser;
+    final user = auth.currentUser;
     if (user == null) return;
 
     final userChatsRef =

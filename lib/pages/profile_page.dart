@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -57,7 +58,8 @@ class ProfilePage extends StatelessWidget {
                           layoutController.responsiveHeight(24, screenHeight),
                     ),
                     Text(
-                      "Username",
+                      FirebaseAuth.instance.currentUser?.displayName ??
+                          "Username",
                       style: TextStyle(
                         color: Get.theme.colorScheme.inversePrimary,
                         fontSize: 24,

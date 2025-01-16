@@ -166,6 +166,7 @@ class HomePage extends StatelessWidget {
                                                   right: 12,
                                                 ),
                                                 child: CircleAvatar(
+                                                  backgroundColor: Get.theme.colorScheme.surface,
                                                   backgroundImage: NetworkImage(
                                                       authController
                                                           .auth
