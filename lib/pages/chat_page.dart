@@ -175,21 +175,39 @@ class ChatPage extends StatelessWidget {
                                                     .theme.colorScheme.primary,
                                               ),
                                             )
-                                          : AnimatedTextKit(
-                                              isRepeatingAnimation: false,
-                                              animatedTexts: [
-                                                TypewriterAnimatedText(
+                                          : message.showAnimation
+                                              ? AnimatedTextKit(
+                                                  onFinished: () async {
+                                                    message.showAnimation =
+                                                        false;
+                                                    await chatController
+                                                        .saveChatToFirebase();
+                                                  },
+                                                  totalRepeatCount: 1,
+                                                  isRepeatingAnimation: false,
+                                                  animatedTexts: [
+                                                    TypewriterAnimatedText(
+                                                      message.message.value!,
+                                                      textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Get
+                                                            .theme
+                                                            .colorScheme
+                                                            .inversePrimary,
+                                                      ),
+                                                      speed: const Duration(
+                                                          milliseconds: 50),
+                                                    )
+                                                  ],
+                                                )
+                                              : Text(
                                                   message.message.value!,
-                                                  textStyle: TextStyle(
+                                                  style: TextStyle(
                                                     fontSize: 16,
                                                     color: Get.theme.colorScheme
                                                         .inversePrimary,
                                                   ),
-                                                  speed: const Duration(
-                                                      milliseconds: 50),
-                                                )
-                                              ],
-                                            ))),
+                                                ))),
                                 ),
                                 Row(
                                   children: [
@@ -257,6 +275,10 @@ class ChatPage extends StatelessWidget {
                   children: [
                     Expanded(
                         child: TextField(
+                      focusNode: chatController.focusNode,
+                      onTapOutside: (event) {
+                        chatController.focusNode.unfocus();
+                      },
                       onChanged: (value) {
                         chatController.userPrompt.value = value;
                       },

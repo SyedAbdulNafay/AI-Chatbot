@@ -11,6 +11,7 @@ class ChatController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
+  final FocusNode focusNode = FocusNode();
   var currentChatId = '';
   var userPrompt = "".obs;
   var messages = <Message>[].obs;
@@ -23,21 +24,50 @@ class ChatController extends GetxController {
     loadChatsFromFirebase();
   }
 
-  Future<void> saveChatToFirebase(Chat chat) async {
-    final user = auth.currentUser;
-    if (user == null) return;
+  Future<void> saveChatToFirebase() async {
+    if (messages.isNotEmpty) {
+      if (chats.isNotEmpty &&
+          chats.any((chat) => chat.chatId == currentChatId)) {
+        var chat = chats.firstWhere((chat) => chat.chatId == currentChatId);
+        chat.messages = List.from(messages);
+        chat.lastUpdated = DateTime.now();
 
-    final userChatsRef = _firestore
-        .collection('Users')
-        .doc(user.uid)
-        .collection('Chats')
-        .doc(chat.chatId);
+        final user = auth.currentUser;
+        if (user == null) return;
 
-    await userChatsRef.set(chat.toJson());
+        final userChatsRef = _firestore
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Chats')
+            .doc(chat.chatId);
+
+        await userChatsRef.set(chat.toJson());
+      } else {
+        final chatId = DateTime.now().toIso8601String();
+        currentChatId = chatId;
+        final newChat = Chat(
+          chatId: chatId,
+          title: messages.first.message.value ?? "New Chat",
+          lastUpdated: DateTime.now(),
+          messages: List.from(messages),
+        );
+        chats.add(newChat);
+
+        final user = auth.currentUser;
+        if (user == null) return;
+
+        final userChatsRef = _firestore
+            .collection('Users')
+            .doc(user.uid)
+            .collection('Chats')
+            .doc(newChat.chatId);
+
+        await userChatsRef.set(newChat.toJson());
+      }
+    }
   }
 
   Future<void> loadChatsFromFirebase() async {
-    debugPrint("loading started");
     isLoadingChats.value = true;
     final user = auth.currentUser;
     if (user == null) return;
@@ -46,7 +76,8 @@ class ChatController extends GetxController {
         _firestore.collection('Users').doc(user.uid).collection('Chats');
     final snapshot = await userChatsRef.get();
 
-    chats.value = snapshot.docs.map((doc) => Chat.fromJson(doc.data())).toList();
+    chats.value =
+        snapshot.docs.map((doc) => Chat.fromJson(doc.data())).toList();
     isLoadingChats.value = false;
   }
 
@@ -63,6 +94,7 @@ class ChatController extends GetxController {
       final aiMessage = Message(
         sentBy: "ai",
         dateTime: DateTime.now(),
+        showAnimation: true,
       );
 
       messages.add(aiMessage);
@@ -71,26 +103,27 @@ class ChatController extends GetxController {
       userPrompt.value = "";
       aiMessage.message.value = response;
 
-      if (messages.isNotEmpty) {
-        if (chats.isNotEmpty &&
-            chats.any((chat) => chat.chatId == currentChatId)) {
-          var chat = chats.firstWhere((chat) => chat.chatId == currentChatId);
-          chat.messages = List.from(messages);
-          chat.lastUpdated = DateTime.now();
-          await saveChatToFirebase(chat);
-        } else {
-          final chatId = DateTime.now().toIso8601String();
-          currentChatId = chatId;
-          final newChat = Chat(
-            chatId: chatId,
-            title: messages.first.message.value ?? "New Chat",
-            lastUpdated: DateTime.now(),
-            messages: List.from(messages),
-          );
-          chats.add(newChat);
-          await saveChatToFirebase(newChat);
-        }
-      }
+      // if (messages.isNotEmpty) {
+      //   if (chats.isNotEmpty &&
+      //       chats.any((chat) => chat.chatId == currentChatId)) {
+      //     var chat = chats.firstWhere((chat) => chat.chatId == currentChatId);
+      //     chat.messages = List.from(messages);
+      //     chat.lastUpdated = DateTime.now();
+      //     debugPrint("Started saving");
+      //     await saveChatToFirebase(chat);
+      //   } else {
+      //     final chatId = DateTime.now().toIso8601String();
+      //     currentChatId = chatId;
+      //     final newChat = Chat(
+      //       chatId: chatId,
+      //       title: messages.first.message.value ?? "New Chat",
+      //       lastUpdated: DateTime.now(),
+      //       messages: List.from(messages),
+      //     );
+      //     chats.add(newChat);
+      //     await saveChatToFirebase(newChat);
+      //   }
+      // }
     } else {
       for (var i = 0; i < messages.length; i++) {
         debugPrint(i.toString());
