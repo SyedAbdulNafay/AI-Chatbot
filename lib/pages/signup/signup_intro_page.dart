@@ -55,6 +55,7 @@ class SignupIntroPage extends StatelessWidget {
                       height:
                           layoutController.responsiveHeight(40, screenHeight)),
                   SocialsButton(
+                      onTap: () => authController.signInWithGoogle(),
                       filePath: 'assets/images/google_logo.svg',
                       title: "Sign In with Google",
                       screenWidth: screenWidth,

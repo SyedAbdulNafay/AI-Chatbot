@@ -56,18 +56,68 @@ class AuthController extends GetxController {
   }
 
   signInWithGoogle() async {
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    try {
+      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
-    if (gUser == null) return;
+      if (gUser == null) return;
 
-    final GoogleSignInAuthentication gAuth = await gUser.authentication;
+      final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: gAuth.accessToken,
-      idToken: gAuth.idToken,
-    );
+      final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken,
+        idToken: gAuth.idToken,
+      );
 
-    return await auth.signInWithCredential(credential);
+      return await auth.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'account-exists-with-different-credential':
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message:
+                "There already exists an account with the email address asserted by the credential.",
+          ));
+          break;
+        case 'invalid-credential':
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message: "The credential is malformed or has expired.",
+          ));
+          break;
+        case 'operation-not-allowed':
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message:
+                "The type of account corresponding to the credential is not enabled.",
+          ));
+          break;
+        case 'user-disabled':
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message:
+                "The user corresponding to the given credential has been disabled.",
+          ));
+          break;
+        case 'user-not-found':
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message: "There is no user corresponding to the given email.",
+          ));
+          break;
+        case 'wrong-password':
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message:
+                "The password is invalid for the given email, or if the account corresponding to the email does not have a password set.",
+          ));
+          break;
+        default:
+          Get.showSnackbar(const GetSnackBar(
+            title: "Error",
+            message: "Unexpected exception occured.",
+          ));
+      }
+    }
   }
 
   Future<void> login() async {
