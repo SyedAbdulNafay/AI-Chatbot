@@ -166,7 +166,8 @@ class HomePage extends StatelessWidget {
                                                   right: 12,
                                                 ),
                                                 child: CircleAvatar(
-                                                  backgroundColor: Get.theme.colorScheme.surface,
+                                                  backgroundColor: Get.theme
+                                                      .colorScheme.surface,
                                                   backgroundImage: NetworkImage(
                                                       authController
                                                           .auth
@@ -283,6 +284,13 @@ class HomePage extends StatelessWidget {
                                     screenWidth: screenWidth,
                                   )
                                 : ChatCard(
+                                    onTap: () {
+                                      chatController.currentChatId =
+                                          chatController.chats[index].chatId;
+                                      chatController.messages.value =
+                                          chatController.chats[index].messages;
+                                      Get.to(() => const ChatPage());
+                                    },
                                     screenHeight: screenHeight,
                                     screenWidth: screenWidth,
                                     chat: chatController.chats[index]),

@@ -1,4 +1,5 @@
 import 'package:ai_chatbot/models/message.dart';
+import 'package:ai_chatbot/pages/loading_animation.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -157,13 +158,14 @@ class ChatPage extends StatelessWidget {
                                       vertical: layoutController
                                           .responsiveHeight(16, screenHeight)),
                                   child: Obx(() => message.message.value == null
-                                      ? Row(
+                                      ? const Row(
                                           children: [
-                                            SpinKitThreeBounce(
-                                              color: Get.theme.colorScheme
-                                                  .inversePrimary,
-                                              size: 15,
-                                            ),
+                                            LoadingAnimation(),
+                                            // SpinKitThreeBounce(
+                                            //   color: Get.theme.colorScheme
+                                            //       .inversePrimary,
+                                            //   size: 15,
+                                            // ),
                                           ],
                                         )
                                       : (message.sentBy == "user"
@@ -200,14 +202,19 @@ class ChatPage extends StatelessWidget {
                                                     )
                                                   ],
                                                 )
-                                              : Text(
-                                                  message.message.value!,
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Get.theme.colorScheme
-                                                        .inversePrimary,
-                                                  ),
-                                                ))),
+                                              : RichText(
+                                                  text: TextSpan(
+                                                      style: TextStyle(
+                                                        color: Get
+                                                            .theme
+                                                            .colorScheme
+                                                            .inversePrimary,
+                                                        fontSize: 16,
+                                                      ),
+                                                      children: chatController
+                                                          .parseResponse(message
+                                                              .message
+                                                              .value!))))),
                                 ),
                                 Row(
                                   children: [
