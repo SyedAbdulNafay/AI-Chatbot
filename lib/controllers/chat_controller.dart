@@ -22,7 +22,7 @@ class ChatController extends GetxController {
   var chats = <Chat>[].obs;
   var isLoadingChats = false.obs;
   final bulletRegex = RegExp(r'^\* (.*)');
-  final boldItalicRegex = RegExp(r'\*\*(.*?)\*\*|\*(.*?)\*');
+  final boldItalicRegex = RegExp(r'\*\*\*(.*?)\*\*\*|\*\*(.*?)\*\*|\*(.*?)\*');
 
   @override
   void onInit() {
@@ -83,11 +83,19 @@ class ChatController extends GetxController {
       if (match.group(1) != null) {
         spans.add(TextSpan(
           text: match.group(1),
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+          ),
         ));
       } else if (match.group(2) != null) {
         spans.add(TextSpan(
           text: match.group(2),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ));
+      } else if (match.group(3) != null) {
+        spans.add(TextSpan(
+          text: match.group(3),
           style: const TextStyle(fontStyle: FontStyle.italic),
         ));
       }
