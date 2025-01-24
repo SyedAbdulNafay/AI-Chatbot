@@ -16,64 +16,67 @@ class Tabs extends StatelessWidget {
     final HomeController homeController = Get.put(HomeController());
 
     return Obx(() => SizedBox(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Tab(
-                  text: "Chats",
-                  icon: SvgPicture.asset(
-                    'assets/svgs/chat-tab-vector.svg',
-                    colorFilter: ColorFilter.mode(
-                        homeController.selectedTab.value == 1
+          child: ScrollConfiguration(
+            behavior: const ScrollBehavior().copyWith(overscroll: false),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Tab(
+                    text: "Chats",
+                    icon: SvgPicture.asset(
+                      'assets/svgs/chat-tab-vector.svg',
+                      colorFilter: ColorFilter.mode(
+                          homeController.selectedTab.value == 1
+                              ? Get.theme.colorScheme.surface
+                              : Get.theme.colorScheme.inversePrimary,
+                          BlendMode.srcIn),
+                    ),
+                    isSelected: homeController.selectedTab.value == 1,
+                    screenWidth: screenWidth,
+                    onTap: () {
+                      homeController.selectedTab.value = 1;
+                    },
+                    screenHeight: screenHeight,
+                  ),
+                  Tab(
+                    text: "Archived",
+                    icon: SvgPicture.asset(
+                      'assets/svgs/archive-tab-vector.svg',
+                      colorFilter: ColorFilter.mode(
+                        homeController.selectedTab.value == 2
                             ? Get.theme.colorScheme.surface
                             : Get.theme.colorScheme.inversePrimary,
-                        BlendMode.srcIn),
-                  ),
-                  isSelected: homeController.selectedTab.value == 1,
-                  screenWidth: screenWidth,
-                  onTap: () {
-                    homeController.selectedTab.value = 1;
-                  },
-                  screenHeight: screenHeight,
-                ),
-                Tab(
-                  text: "Archived",
-                  icon: SvgPicture.asset(
-                    'assets/svgs/archive-tab-vector.svg',
-                    colorFilter: ColorFilter.mode(
-                      homeController.selectedTab.value == 2
-                          ? Get.theme.colorScheme.surface
-                          : Get.theme.colorScheme.inversePrimary,
-                      BlendMode.srcIn,
+                        BlendMode.srcIn,
+                      ),
                     ),
+                    isSelected: homeController.selectedTab.value == 2,
+                    screenWidth: screenWidth,
+                    onTap: () {
+                      homeController.selectedTab.value = 2;
+                    },
+                    screenHeight: screenHeight,
                   ),
-                  isSelected: homeController.selectedTab.value == 2,
-                  screenWidth: screenWidth,
-                  onTap: () {
-                    homeController.selectedTab.value = 2;
-                  },
-                  screenHeight: screenHeight,
-                ),
-                Tab(
-                  text: "Images",
-                  icon: SvgPicture.asset(
-                    'assets/svgs/select-image-vector.svg',
-                    colorFilter: ColorFilter.mode(
-                      homeController.selectedTab.value == 3
-                          ? Get.theme.colorScheme.surface
-                          : Get.theme.colorScheme.inversePrimary,
-                      BlendMode.srcIn,
+                  Tab(
+                    text: "Images",
+                    icon: SvgPicture.asset(
+                      'assets/svgs/select-image-vector.svg',
+                      colorFilter: ColorFilter.mode(
+                        homeController.selectedTab.value == 3
+                            ? Get.theme.colorScheme.surface
+                            : Get.theme.colorScheme.inversePrimary,
+                        BlendMode.srcIn,
+                      ),
                     ),
+                    isSelected: homeController.selectedTab.value == 3,
+                    screenWidth: screenWidth,
+                    onTap: () {
+                      homeController.selectedTab.value = 3;
+                    },
+                    screenHeight: screenHeight,
                   ),
-                  isSelected: homeController.selectedTab.value == 3,
-                  screenWidth: screenWidth,
-                  onTap: () {
-                    homeController.selectedTab.value = 3;
-                  },
-                  screenHeight: screenHeight,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ));

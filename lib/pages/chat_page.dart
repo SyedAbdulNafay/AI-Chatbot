@@ -30,7 +30,6 @@ class ChatPage extends StatelessWidget {
             leading: IconButton(
               onPressed: () {
                 chatController.currentChatId = '';
-                // chatController.messages.clear();
                 Get.back();
               },
               icon: Icon(
@@ -80,196 +79,204 @@ class ChatPage extends StatelessWidget {
                       ),
                     )
                   : Expanded(
-                      child: ListView.builder(
-                        controller: chatController.scrollController,
-                        itemCount: chatController.messages.length,
-                        itemBuilder: (context, index) {
-                          Message message = chatController.messages[index];
+                      child: ScrollConfiguration(
+                        behavior:
+                            const ScrollBehavior().copyWith(overscroll: false),
+                        child: ListView.builder(
+                          controller: chatController.scrollController,
+                          itemCount: chatController.messages.length,
+                          itemBuilder: (context, index) {
+                            Message message = chatController.messages[index];
 
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: layoutController.responsiveWidth(
-                                    24, screenWidth),
-                                vertical: layoutController.responsiveHeight(
-                                    24, screenHeight)),
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    top: BorderSide(
-                                        color: Get.theme.colorScheme.tertiary
-                                            .withOpacity(0.28)))),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    message.sentBy == "user" &&
-                                            chatController.auth.currentUser
-                                                    ?.photoURL !=
-                                                null
-                                        ? CircleAvatar(
-                                            maxRadius: 15,
-                                            backgroundImage: NetworkImage(
-                                                chatController.auth.currentUser!
-                                                    .photoURL!),
-                                          )
-                                        : Container(
-                                            padding: EdgeInsets.all(
-                                                layoutController
-                                                    .responsiveHeight(
-                                                        10, screenHeight)),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: message.sentBy == "user"
-                                                  ? Get
-                                                      .theme.colorScheme.primary
-                                                  : Get.theme.colorScheme
-                                                      .inversePrimary,
-                                            ),
-                                            child: Text(
-                                              message.sentBy == "user"
-                                                  ? "U"
-                                                  : "A",
-                                              style: TextStyle(
-                                                color: Get
-                                                    .theme.colorScheme.surface,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ),
-                                    SizedBox(
-                                      width: layoutController.responsiveWidth(
-                                          12, screenWidth),
-                                    ),
-                                    Text(
-                                      message.sentBy == "user"
-                                          ? "You"
-                                          : "Chat Bot AI 4.5",
-                                      style: TextStyle(
-                                        color: Get
-                                            .theme.colorScheme.inversePrimary,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: layoutController
-                                          .responsiveHeight(16, screenHeight)),
-                                  child: Obx(() => message.message.value == null
-                                      ? const Row(
-                                          children: [
-                                            LoadingAnimation(),
-                                            // SpinKitThreeBounce(
-                                            //   color: Get.theme.colorScheme
-                                            //       .inversePrimary,
-                                            //   size: 15,
-                                            // ),
-                                          ],
-                                        )
-                                      : (message.sentBy == "user"
-                                          ? Text(
-                                              message.message.value!,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Get
-                                                    .theme.colorScheme.primary,
-                                              ),
+                            return Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: layoutController.responsiveWidth(
+                                      24, screenWidth),
+                                  vertical: layoutController.responsiveHeight(
+                                      24, screenHeight)),
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                      top: BorderSide(
+                                          color: Get.theme.colorScheme.tertiary
+                                              .withOpacity(0.28)))),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      message.sentBy == "user" &&
+                                              chatController.auth.currentUser
+                                                      ?.photoURL !=
+                                                  null
+                                          ? CircleAvatar(
+                                              maxRadius: 15,
+                                              backgroundImage: NetworkImage(
+                                                  chatController.auth
+                                                      .currentUser!.photoURL!),
                                             )
-                                          : message.showAnimation
-                                              ? AnimatedTextKit(
-                                                  onFinished: () async {
-                                                    message.showAnimation =
-                                                        false;
-                                                    await chatController
-                                                        .saveChatToFirebase();
-                                                  },
-                                                  totalRepeatCount: 1,
-                                                  isRepeatingAnimation: false,
-                                                  animatedTexts: [
-                                                    TypewriterAnimatedText(
-                                                      message.message.value!,
-                                                      textStyle: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Get
-                                                            .theme
-                                                            .colorScheme
-                                                            .inversePrimary,
-                                                      ),
-                                                      speed: const Duration(
-                                                          milliseconds: 50),
-                                                    )
-                                                  ],
-                                                )
-                                              : RichText(
-                                                  text: TextSpan(
-                                                      style: TextStyle(
-                                                        color: Get
-                                                            .theme
-                                                            .colorScheme
-                                                            .inversePrimary,
-                                                        fontSize: 16,
-                                                      ),
-                                                      children: chatController
-                                                          .parseResponse(message
-                                                              .message
-                                                              .value!))))),
-                                ),
-                                Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/svgs/Edit-Square.svg',
-                                          colorFilter: ColorFilter.mode(
-                                            Get.theme.colorScheme.tertiary,
-                                            BlendMode.srcIn,
+                                          : Container(
+                                              padding: EdgeInsets.all(
+                                                  layoutController
+                                                      .responsiveHeight(
+                                                          10, screenHeight)),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: message.sentBy == "user"
+                                                    ? Get.theme.colorScheme
+                                                        .primary
+                                                    : Get.theme.colorScheme
+                                                        .inversePrimary,
+                                              ),
+                                              child: Text(
+                                                message.sentBy == "user"
+                                                    ? "U"
+                                                    : "A",
+                                                style: TextStyle(
+                                                  color: Get.theme.colorScheme
+                                                      .surface,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                      SizedBox(
+                                        width: layoutController.responsiveWidth(
+                                            12, screenWidth),
+                                      ),
+                                      Text(
+                                        message.sentBy == "user"
+                                            ? "You"
+                                            : "Chat Bot AI 4.5",
+                                        style: TextStyle(
+                                          color: Get
+                                              .theme.colorScheme.inversePrimary,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical:
+                                            layoutController.responsiveHeight(
+                                                16, screenHeight)),
+                                    child: Obx(() => message.message.value ==
+                                            null
+                                        ? const Row(
+                                            children: [
+                                              LoadingAnimation(),
+                                              // SpinKitThreeBounce(
+                                              //   color: Get.theme.colorScheme
+                                              //       .inversePrimary,
+                                              //   size: 15,
+                                              // ),
+                                            ],
+                                          )
+                                        : (message.sentBy == "user"
+                                            ? Text(
+                                                message.message.value!,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Get.theme.colorScheme
+                                                      .primary,
+                                                ),
+                                              )
+                                            : message.showAnimation
+                                                ? AnimatedTextKit(
+                                                    onFinished: () async {
+                                                      message.showAnimation =
+                                                          false;
+                                                      await chatController
+                                                          .saveChatToFirebase();
+                                                    },
+                                                    totalRepeatCount: 1,
+                                                    isRepeatingAnimation: false,
+                                                    animatedTexts: [
+                                                      TypewriterAnimatedText(
+                                                        message.message.value!,
+                                                        textStyle: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Get
+                                                              .theme
+                                                              .colorScheme
+                                                              .inversePrimary,
+                                                        ),
+                                                        speed: const Duration(
+                                                            milliseconds: 50),
+                                                      )
+                                                    ],
+                                                  )
+                                                : RichText(
+                                                    text: TextSpan(
+                                                        style: TextStyle(
+                                                          color: Get
+                                                              .theme
+                                                              .colorScheme
+                                                              .inversePrimary,
+                                                          fontSize: 16,
+                                                        ),
+                                                        children: chatController
+                                                            .parseResponse(
+                                                                message.message
+                                                                    .value!))))),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/Edit-Square.svg',
+                                            colorFilter: ColorFilter.mode(
+                                              Get.theme.colorScheme.tertiary,
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: layoutController
-                                              .responsiveWidth(8, screenWidth),
-                                        ),
-                                        Text(
-                                          "Edit",
-                                          style: TextStyle(
-                                              color: Get
-                                                  .theme.colorScheme.tertiary),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: layoutController.responsiveWidth(
-                                          24, screenWidth),
-                                    ),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/svgs/Copy-Icon.svg',
-                                          colorFilter: ColorFilter.mode(
-                                            Get.theme.colorScheme.tertiary,
-                                            BlendMode.srcIn,
+                                          SizedBox(
+                                            width: layoutController
+                                                .responsiveWidth(
+                                                    8, screenWidth),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: layoutController
-                                              .responsiveWidth(8, screenWidth),
-                                        ),
-                                        Text(
-                                          "Copy",
-                                          style: TextStyle(
-                                              color: Get
-                                                  .theme.colorScheme.tertiary),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        },
+                                          Text(
+                                            "Edit",
+                                            style: TextStyle(
+                                                color: Get.theme.colorScheme
+                                                    .tertiary),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: layoutController.responsiveWidth(
+                                            24, screenWidth),
+                                      ),
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/Copy-Icon.svg',
+                                            colorFilter: ColorFilter.mode(
+                                              Get.theme.colorScheme.tertiary,
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: layoutController
+                                                .responsiveWidth(
+                                                    8, screenWidth),
+                                          ),
+                                          Text(
+                                            "Copy",
+                                            style: TextStyle(
+                                                color: Get.theme.colorScheme
+                                                    .tertiary),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     )),
               Padding(
