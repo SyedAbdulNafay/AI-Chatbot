@@ -35,6 +35,9 @@ class ChatController extends GetxController {
   final inlineRegex =
       RegExp(r'\*\*\*(.*?)\*\*\*|\*\*(.*?)\*\*|\*(.*?)\*|~~(.*?)~~|`(.*?)`');
   final codeBlockRegex = RegExp(r'```([\s\S]*?)```');
+  final singleLineCommentRegex = RegExp(r'#.*|//.*');
+  final multiLineCommentRegex = RegExp(
+      "(\\'\\'\\'[\\s\\S]*?\\'\\'\\'|\\\"\\\"\\\"[\\s\\S]*?\\\"\\\"\\\")");
 
   @override
   void onInit() {
@@ -74,11 +77,54 @@ class ChatController extends GetxController {
   }
 
   List<InlineSpan> _parseCodeBlock(String code) {
+    final List<InlineSpan> spans = [];
+    int lastMatchEnd = 0;
+
     final lines = code.split('\n');
 
     final firstLine = lines.isNotEmpty ? lines.first : 'Output';
 
     final remainingCode = lines.length > 1 ? lines.sublist(1).join('\n') : '';
+
+    final matches = [
+      ...singleLineCommentRegex.allMatches(remainingCode),
+      ...multiLineCommentRegex.allMatches(remainingCode),
+    ]..sort((a, b) => a.start.compareTo(b.start));
+
+    for (final match in matches) {
+      // Add plain text before the match
+      if (match.start > lastMatchEnd) {
+        spans.add(TextSpan(
+          text: remainingCode.substring(lastMatchEnd, match.start),
+          style: const TextStyle(
+            fontFamily: 'monospace',
+            color: Colors.white,
+          ),
+        ));
+      }
+
+      // Add the matched comment with a green style
+      spans.add(TextSpan(
+        text: remainingCode.substring(match.start, match.end),
+        style: TextStyle(
+          color: Colors.green[400],
+          fontFamily: 'monospace',
+        ),
+      ));
+
+      lastMatchEnd = match.end;
+    }
+
+    // Add remaining plain text after the last match
+    if (lastMatchEnd < remainingCode.length) {
+      spans.add(TextSpan(
+        text: remainingCode.substring(lastMatchEnd),
+        style: const TextStyle(
+          fontFamily: 'monospace',
+          color: Colors.white,
+        ),
+      ));
+    }
 
     return [
       WidgetSpan(
@@ -138,12 +184,16 @@ class ChatController extends GetxController {
             ),
             width: double.infinity,
             padding: const EdgeInsets.all(8),
-            child: Text(
-              remainingCode,
-              style: const TextStyle(
-                fontFamily: 'monospace',
-                color: Colors.white,
-              ),
+            child:
+                // Text(
+                //   remainingCode,
+                //   style: const TextStyle(
+                //     fontFamily: 'monospace',
+                //     color: Colors.white,
+                //   ),
+                // )
+                RichText(
+              text: TextSpan(children: spans),
             ),
           ),
         ],
@@ -228,7 +278,6 @@ class ChatController extends GetxController {
 
     // Add remaining plain text after the last match
     if (lastMatchEnd < text.length) {
-      debugPrint("Plain text");
       spans.add(TextSpan(text: text.substring(lastMatchEnd)));
     }
     return spans;
