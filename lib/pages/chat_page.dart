@@ -3,6 +3,7 @@ import 'package:ai_chatbot/pages/loading_animation.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -248,27 +249,45 @@ class ChatPage extends StatelessWidget {
                                         width: layoutController.responsiveWidth(
                                             24, screenWidth),
                                       ),
-                                      Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/svgs/Copy-Icon.svg',
-                                            colorFilter: ColorFilter.mode(
-                                              Get.theme.colorScheme.tertiary,
-                                              BlendMode.srcIn,
+                                      GestureDetector(
+                                        onTap: () {
+                                          Clipboard.setData(ClipboardData(
+                                                  text: message.message.value!))
+                                              .then((onValue) {
+                                            Get.snackbar(
+                                              "Copied",
+                                              "Text copied to clipboard",
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              backgroundColor:
+                                                  Get.theme.colorScheme.surface,
+                                              colorText: Get.theme.colorScheme
+                                                  .inversePrimary,
+                                            );
+                                          });
+                                        },
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/Copy-Icon.svg',
+                                              colorFilter: ColorFilter.mode(
+                                                Get.theme.colorScheme.tertiary,
+                                                BlendMode.srcIn,
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: layoutController
-                                                .responsiveWidth(
-                                                    8, screenWidth),
-                                          ),
-                                          Text(
-                                            "Copy",
-                                            style: TextStyle(
-                                                color: Get.theme.colorScheme
-                                                    .tertiary),
-                                          ),
-                                        ],
+                                            SizedBox(
+                                              width: layoutController
+                                                  .responsiveWidth(
+                                                      8, screenWidth),
+                                            ),
+                                            Text(
+                                              "Copy",
+                                              style: TextStyle(
+                                                  color: Get.theme.colorScheme
+                                                      .tertiary),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   )

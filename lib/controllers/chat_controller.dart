@@ -5,25 +5,36 @@ import 'package:ai_chatbot/models/open_ai_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ChatController extends GetxController {
+  // Services
   final OpenAIModel _aiService = OpenAIModel();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Controllers
   final TextEditingController textController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
+
+  // Animation Timer
   late Timer timer;
+
+  // variables
   var currentFrame = 01.obs;
   var currentChatId = '';
   var userPrompt = "".obs;
   var messages = <Message>[].obs;
   var chats = <Chat>[].obs;
   var isLoadingChats = false.obs;
+
+  // RegEx patterns for parsing markdown
   final bulletRegex = RegExp(r'^\* (.*)');
-  final boldItalicRegex =
-      RegExp(r'\*\*\*(.*?)\*\*\*|\*\*(.*?)\*\*|\*(.*?)\*|~~(.*?)~~');
+  final inlineRegex =
+      RegExp(r'\*\*\*(.*?)\*\*\*|\*\*(.*?)\*\*|\*(.*?)\*|~~(.*?)~~|`(.*?)`');
+  final codeBlockRegex = RegExp(r'```([\s\S]*?)```');
 
   @override
   void onInit() {
@@ -37,31 +48,127 @@ class ChatController extends GetxController {
     });
   }
 
-  List<TextSpan> parseResponse(String response) {
-    final List<TextSpan> spans = [];
+  List<InlineSpan> parseResponse(String response) {
+    final List<InlineSpan> spans = [];
+    int lastMatchEnd = 0;
 
-    //Split lines to process each line individually
-    final lines = response.split('\n');
+    for (final match in codeBlockRegex.allMatches(response)) {
+      // Add plain text before the code block
+      if (match.start > lastMatchEnd) {
+        spans.addAll(_processNonCodeLines(
+            response.substring(lastMatchEnd, match.start)));
+      }
 
-    for (final line in lines) {
+      final codeContent = match.group(1)!.trim();
+      spans.addAll(_parseCodeBlock(codeContent));
+
+      lastMatchEnd = match.end;
+    }
+
+    // Add remaining plain text after the last code block
+    if (lastMatchEnd < response.length) {
+      spans.addAll(_processNonCodeLines(response.substring(lastMatchEnd)));
+    }
+
+    return spans;
+  }
+
+  List<InlineSpan> _parseCodeBlock(String code) {
+    final lines = code.split('\n');
+
+    final firstLine = lines.isNotEmpty ? lines.first : 'Output';
+
+    final remainingCode = lines.length > 1 ? lines.sublist(1).join('\n') : '';
+
+    return [
+      WidgetSpan(
+          child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+              color: Colors.grey[700],
+            ),
+            width: double.infinity,
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  firstLine,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Clipboard.setData(ClipboardData(text: remainingCode));
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        size: 16,
+                        Icons.copy,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        'Copy',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+              ),
+              color: Colors.grey[800],
+            ),
+            width: double.infinity,
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              remainingCode,
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ))
+    ];
+  }
+
+  List<InlineSpan> _processNonCodeLines(String text) {
+    final List<InlineSpan> spans = [];
+
+    for (final line in text.split('\n')) {
       if (bulletRegex.hasMatch(line)) {
-        // Extract the content after the bullet point
-        final match = bulletRegex.firstMatch(line);
-        if (match != null) {
-          final content = match.group(1)!;
-
-          // Parse inline formatting for the bullet content
+        // Process bullet points
+        if (bulletRegex.firstMatch(line) != null) {
           spans.add(const TextSpan(
             text: '• ', // Unicode bullet point
             style: TextStyle(fontWeight: FontWeight.bold),
           ));
-          spans.addAll(_parseInlineFormatting(content, boldItalicRegex));
-          spans.add(
-              const TextSpan(text: '\n')); // Newline after each bullet point
+          spans.addAll(
+              _parseInlineFormatting(bulletRegex.firstMatch(line)!.group(1)!));
+          spans.add(const TextSpan(text: '\n'));
         }
       } else {
-        // Parse inline formatting for normal lines
-        spans.addAll(_parseInlineFormatting(line, boldItalicRegex));
+        // Process normal lines
+        spans.addAll(_parseInlineFormatting(line));
         spans.add(const TextSpan(text: '\n'));
       }
     }
@@ -69,12 +176,11 @@ class ChatController extends GetxController {
     return spans;
   }
 
-  List<TextSpan> _parseInlineFormatting(String text, RegExp regex) {
+  List<TextSpan> _parseInlineFormatting(String text) {
     final spans = <TextSpan>[];
-
     int lastMatchEnd = 0;
 
-    for (final match in regex.allMatches(text)) {
+    for (final match in inlineRegex.allMatches(text)) {
       // Add plain text before the match
       if (match.start > lastMatchEnd) {
         spans.add(TextSpan(text: text.substring(lastMatchEnd, match.start)));
@@ -106,6 +212,15 @@ class ChatController extends GetxController {
             decoration: TextDecoration.lineThrough,
           ),
         ));
+      } else if (match.group(5) != null) {
+        spans.add(TextSpan(
+          text: match.group(5),
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'monospace',
+            backgroundColor: Colors.grey[500],
+          ),
+        ));
       }
 
       lastMatchEnd = match.end;
@@ -113,6 +228,7 @@ class ChatController extends GetxController {
 
     // Add remaining plain text after the last match
     if (lastMatchEnd < text.length) {
+      debugPrint("Plain text");
       spans.add(TextSpan(text: text.substring(lastMatchEnd)));
     }
     return spans;

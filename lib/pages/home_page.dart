@@ -71,7 +71,11 @@ class HomePage extends StatelessWidget {
                                   fontFamily: 'HeadingFont', fontSize: 35),
                             ),
                             GestureDetector(
-                              onTap: () => Get.to(() => const ChatPage()),
+                              onTap: () {
+                                chatController.currentChatId = '';
+                                chatController.messages.value = [];
+                                Get.to(() => const ChatPage());
+                              },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: layoutController.responsiveWidth(
