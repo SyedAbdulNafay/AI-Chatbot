@@ -4,7 +4,6 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -166,11 +165,6 @@ class ChatPage extends StatelessWidget {
                                         ? const Row(
                                             children: [
                                               LoadingAnimation(),
-                                              // SpinKitThreeBounce(
-                                              //   color: Get.theme.colorScheme
-                                              //       .inversePrimary,
-                                              //   size: 15,
-                                              // ),
                                             ],
                                           )
                                         : (message.sentBy == "user"
@@ -182,44 +176,19 @@ class ChatPage extends StatelessWidget {
                                                       .primary,
                                                 ),
                                               )
-                                            : message.showAnimation
-                                                ? AnimatedTextKit(
-                                                    onFinished: () async {
-                                                      message.showAnimation =
-                                                          false;
-                                                      await chatController
-                                                          .saveChatToFirebase();
-                                                    },
-                                                    totalRepeatCount: 1,
-                                                    isRepeatingAnimation: false,
-                                                    animatedTexts: [
-                                                      TypewriterAnimatedText(
-                                                        message.message.value!,
-                                                        textStyle: TextStyle(
-                                                          fontSize: 16,
-                                                          color: Get
-                                                              .theme
-                                                              .colorScheme
-                                                              .inversePrimary,
-                                                        ),
-                                                        speed: const Duration(
-                                                            milliseconds: 50),
-                                                      )
-                                                    ],
-                                                  )
-                                                : RichText(
-                                                    text: TextSpan(
-                                                        style: TextStyle(
-                                                          color: Get
-                                                              .theme
-                                                              .colorScheme
-                                                              .inversePrimary,
-                                                          fontSize: 16,
-                                                        ),
-                                                        children: chatController
-                                                            .parseResponse(
-                                                                message.message
-                                                                    .value!))))),
+                                            : RichText(
+                                                text: TextSpan(
+                                                    style: TextStyle(
+                                                      color: Get
+                                                          .theme
+                                                          .colorScheme
+                                                          .inversePrimary,
+                                                      fontSize: 16,
+                                                    ),
+                                                    children: chatController
+                                                        .parseResponse(message
+                                                            .message
+                                                            .value!))))),
                                   ),
                                   Row(
                                     children: [

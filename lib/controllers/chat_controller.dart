@@ -355,10 +355,12 @@ class ChatController extends GetxController {
 
       messages.add(aiMessage);
 
-      String? response = await _aiService.generateResponse(userPrompt.value);
+      _aiService.generateResponseStream(userPrompt.value).listen((response) {
+        aiMessage.message.value = (aiMessage.message.value ?? '') + response;
+        aiMessage.showAnimation = false;
+        _stopAnimation();
+      });
       userPrompt.value = "";
-      aiMessage.message.value = response;
-      _stopAnimation();
     } else {
       debugPrint(messages[messages.length - 1].message.value);
     }
