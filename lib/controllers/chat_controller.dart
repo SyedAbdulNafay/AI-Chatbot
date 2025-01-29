@@ -45,10 +45,14 @@ class ChatController extends GetxController {
     loadChatsFromFirebase();
   }
 
-  void startAnimation() {
+  void _startAnimation() {
     timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       currentFrame.value == 07 ? currentFrame.value = 01 : currentFrame.value++;
     });
+  }
+
+  void _stopAnimation() {
+    timer.cancel();
   }
 
   List<InlineSpan> parseResponse(String response) {
@@ -184,15 +188,7 @@ class ChatController extends GetxController {
             ),
             width: double.infinity,
             padding: const EdgeInsets.all(8),
-            child:
-                // Text(
-                //   remainingCode,
-                //   style: const TextStyle(
-                //     fontFamily: 'monospace',
-                //     color: Colors.white,
-                //   ),
-                // )
-                RichText(
+            child: RichText(
               text: TextSpan(children: spans),
             ),
           ),
@@ -342,6 +338,7 @@ class ChatController extends GetxController {
 
   Future<void> onSend() async {
     if (textController.text.isNotEmpty) {
+      _startAnimation();
       textController.clear();
 
       messages.add(Message(
@@ -361,6 +358,7 @@ class ChatController extends GetxController {
       String? response = await _aiService.generateResponse(userPrompt.value);
       userPrompt.value = "";
       aiMessage.message.value = response;
+      _stopAnimation();
     } else {
       debugPrint(messages[messages.length - 1].message.value);
     }
