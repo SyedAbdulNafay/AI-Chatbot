@@ -20,7 +20,7 @@ class ChatController extends GetxController {
   final FocusNode focusNode = FocusNode();
 
   // Animation Timer
-  late Timer timer;
+  late Timer _timer;
 
   // variables
   var currentFrame = 01.obs;
@@ -31,35 +31,35 @@ class ChatController extends GetxController {
   var isLoadingChats = false.obs;
 
   // RegEx patterns for parsing markdown
-  final bulletRegex = RegExp(r'^\* (.*)');
-  final inlineRegex =
+  final _bulletRegex = RegExp(r'^\* (.*)');
+  final _inlineRegex =
       RegExp(r'\*\*\*(.*?)\*\*\*|\*\*(.*?)\*\*|\*(.*?)\*|~~(.*?)~~|`(.*?)`');
-  final codeBlockRegex = RegExp(r'```([\s\S]*?)```');
-  final singleLineCommentRegex = RegExp(r'#.*|//.*');
-  final multiLineCommentRegex = RegExp(
+  final _codeBlockRegex = RegExp(r'```([\s\S]*?)```');
+  final _singleLineCommentRegex = RegExp(r'#.*|//.*');
+  final _multiLineCommentRegex = RegExp(
       "(\\'\\'\\'[\\s\\S]*?\\'\\'\\'|\\\"\\\"\\\"[\\s\\S]*?\\\"\\\"\\\")");
 
   @override
   void onInit() {
     super.onInit();
-    loadChatsFromFirebase();
+    _loadChatsFromFirebase();
   }
 
   void _startAnimation() {
-    timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       currentFrame.value == 07 ? currentFrame.value = 01 : currentFrame.value++;
     });
   }
 
   void _stopAnimation() {
-    timer.cancel();
+    _timer.cancel();
   }
 
   List<InlineSpan> parseResponse(String response) {
     final List<InlineSpan> spans = [];
     int lastMatchEnd = 0;
 
-    for (final match in codeBlockRegex.allMatches(response)) {
+    for (final match in _codeBlockRegex.allMatches(response)) {
       // Add plain text before the code block
       if (match.start > lastMatchEnd) {
         spans.addAll(_processNonCodeLines(
@@ -91,8 +91,8 @@ class ChatController extends GetxController {
     final remainingCode = lines.length > 1 ? lines.sublist(1).join('\n') : '';
 
     final matches = [
-      ...singleLineCommentRegex.allMatches(remainingCode),
-      ...multiLineCommentRegex.allMatches(remainingCode),
+      ..._singleLineCommentRegex.allMatches(remainingCode),
+      ..._multiLineCommentRegex.allMatches(remainingCode),
     ]..sort((a, b) => a.start.compareTo(b.start));
 
     for (final match in matches) {
@@ -201,15 +201,15 @@ class ChatController extends GetxController {
     final List<InlineSpan> spans = [];
 
     for (final line in text.split('\n')) {
-      if (bulletRegex.hasMatch(line)) {
+      if (_bulletRegex.hasMatch(line)) {
         // Process bullet points
-        if (bulletRegex.firstMatch(line) != null) {
+        if (_bulletRegex.firstMatch(line) != null) {
           spans.add(const TextSpan(
             text: '• ', // Unicode bullet point
             style: TextStyle(fontWeight: FontWeight.bold),
           ));
           spans.addAll(
-              _parseInlineFormatting(bulletRegex.firstMatch(line)!.group(1)!));
+              _parseInlineFormatting(_bulletRegex.firstMatch(line)!.group(1)!));
           spans.add(const TextSpan(text: '\n'));
         }
       } else {
@@ -226,7 +226,7 @@ class ChatController extends GetxController {
     final spans = <TextSpan>[];
     int lastMatchEnd = 0;
 
-    for (final match in inlineRegex.allMatches(text)) {
+    for (final match in _inlineRegex.allMatches(text)) {
       // Add plain text before the match
       if (match.start > lastMatchEnd) {
         spans.add(TextSpan(text: text.substring(lastMatchEnd, match.start)));
@@ -279,7 +279,7 @@ class ChatController extends GetxController {
     return spans;
   }
 
-  Future<void> saveChatToFirebase() async {
+  Future<void> _saveChatToFirebase() async {
     if (messages.isNotEmpty) {
       if (chats.isNotEmpty &&
           chats.any((chat) => chat.chatId == currentChatId)) {
@@ -322,7 +322,7 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> loadChatsFromFirebase() async {
+  Future<void> _loadChatsFromFirebase() async {
     isLoadingChats.value = true;
     final user = auth.currentUser;
     if (user == null) return;
@@ -361,6 +361,7 @@ class ChatController extends GetxController {
         _stopAnimation();
       });
       userPrompt.value = "";
+      _saveChatToFirebase();
     } else {
       debugPrint(messages[messages.length - 1].message.value);
     }

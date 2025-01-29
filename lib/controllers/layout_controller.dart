@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class LayoutController extends GetxController {
-  var box = Hive.box('myThemeBox');
+  final _box = Hive.box('myThemeBox');
   var isDarkMode = false.obs;
   double responsiveHeight(double pixelValue, double screenHeight) {
     return screenHeight * (pixelValue / 928);
@@ -15,6 +15,6 @@ class LayoutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    isDarkMode.value = box.get('isDarkMode');
+    isDarkMode.value = _box.get('isDarkMode');
   }
 }

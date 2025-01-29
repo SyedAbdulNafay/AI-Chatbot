@@ -32,9 +32,9 @@ class AuthController extends GetxController {
   var canResendEmail = false.obs;
   var isEmailVerified = false.obs;
   var isUserLoggedIn = false.obs;
-  var countdown = 120.obs;
-  Timer? countdownTimer;
-  var emailError = RxnString();
+  var _countdown = 120.obs;
+  Timer? _countdownTimer;
+  var _emailError = RxnString();
 
   @override
   void onInit() {
@@ -49,8 +49,8 @@ class AuthController extends GetxController {
   }
 
   String get countdownFormatted {
-    int minutes = countdown.value ~/ 60;
-    int seconds = countdown.value % 60;
+    int minutes = _countdown.value ~/ 60;
+    int seconds = _countdown.value % 60;
 
     return '${minutes.toString().padLeft(1, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
@@ -167,13 +167,13 @@ class AuthController extends GetxController {
             .get();
 
         if (emailQuery.docs.isNotEmpty) {
-          emailError.value = "This email is already in use.";
+          _emailError.value = "This email is already in use.";
           isSigningIn.value = false;
           signupEmailFormKey.currentState!.validate();
           return;
         }
 
-        emailError.value = null;
+        _emailError.value = null;
         Get.to(() => const SignupPasswordPage(),
             transition: Transition.rightToLeft);
       } catch (e) {
@@ -230,7 +230,7 @@ class AuthController extends GetxController {
 
       if (isEmailVerified.value) {
         timer.cancel(); // Stop polling
-        countdownTimer?.cancel();
+        _countdownTimer?.cancel();
         try {
           await createUserDocument();
           Get.offAll(() => const HomePage());
@@ -258,12 +258,12 @@ class AuthController extends GetxController {
   }
 
   void startCountdown() {
-    countdown.value = 120;
+    _countdown.value = 120;
     canResendEmail.value = false;
-    countdownTimer?.cancel();
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (countdown.value > 0) {
-        countdown.value--;
+    _countdownTimer?.cancel();
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_countdown.value > 0) {
+        _countdown.value--;
       } else {
         canResendEmail.value = true;
         timer.cancel();
@@ -282,8 +282,8 @@ class AuthController extends GetxController {
       return "Enter valid email";
     }
     debugPrint("2");
-    if (emailError.value != null) {
-      return emailError.value;
+    if (_emailError.value != null) {
+      return _emailError.value;
     }
     return null;
   }
