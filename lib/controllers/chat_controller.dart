@@ -350,14 +350,12 @@ class ChatController extends GetxController {
       final aiMessage = Message(
         sentBy: "ai",
         dateTime: DateTime.now(),
-        showAnimation: true,
       );
 
       messages.add(aiMessage);
 
       _aiService.generateResponseStream(userPrompt.value).listen((response) {
         aiMessage.message.value = (aiMessage.message.value ?? '') + response;
-        aiMessage.showAnimation = false;
         _stopAnimation();
       });
       userPrompt.value = "";
