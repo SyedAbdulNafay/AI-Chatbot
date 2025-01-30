@@ -326,9 +326,6 @@ class ChatPage extends StatelessWidget {
                     Obx(() => SendButton(
                           onTap: () async {
                             await chatController.onSend();
-                            chatController.scrollController.jumpTo(
-                                chatController
-                                    .scrollController.position.maxScrollExtent);
                           },
                           disabled: chatController.userPrompt.value == "",
                         )),

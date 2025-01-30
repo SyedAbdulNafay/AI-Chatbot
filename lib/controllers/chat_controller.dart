@@ -341,12 +341,14 @@ class ChatController extends GetxController {
       _startAnimation();
       textController.clear();
 
+      // Add user message to the chat
       messages.add(Message(
         sentBy: 'user',
         message: userPrompt.value,
         dateTime: DateTime.now(),
       ));
 
+      // Add AI response to the chat
       final aiMessage = Message(
         sentBy: "ai",
         dateTime: DateTime.now(),
@@ -354,12 +356,28 @@ class ChatController extends GetxController {
 
       messages.add(aiMessage);
 
-      _aiService.generateResponseStream(userPrompt.value).listen((response) {
+      // Prepare context by extracting previous messages
+      List<Map<String, String>> contextHistory = messages.map((message) {
+        return {
+          'role': message.sentBy == "user" ? "user" : "model",
+          'content': message.message.value ?? '',
+        };
+      }).toList();
+
+      // Limit context size if needed (e.g. last 10 messages)
+      if (contextHistory.length > 10) {
+        contextHistory = contextHistory.sublist(contextHistory.length - 10);
+      }
+
+      // Send the request with chat history as context
+      _aiService
+          .generateResponseStream(userPrompt.value, contextHistory)
+          .listen((response) {
         aiMessage.message.value = (aiMessage.message.value ?? '') + response;
         _stopAnimation();
       });
       userPrompt.value = "";
-      _saveChatToFirebase();
+      // _saveChatToFirebase();
     } else {
       debugPrint(messages[messages.length - 1].message.value);
     }
