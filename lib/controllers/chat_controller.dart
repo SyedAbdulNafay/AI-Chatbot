@@ -29,6 +29,7 @@ class ChatController extends GetxController {
   var messages = <Message>[].obs;
   var chats = <Chat>[].obs;
   var isLoadingChats = false.obs;
+  bool reOpenedChat = false;
 
   // RegEx patterns for parsing markdown
   final _bulletRegex = RegExp(r'^\* (.*)');
@@ -357,12 +358,16 @@ class ChatController extends GetxController {
       messages.add(aiMessage);
 
       // Prepare context by extracting previous messages
-      List<Map<String, String>> contextHistory = messages.map((message) {
-        return {
-          'role': message.sentBy == "user" ? "user" : "model",
-          'content': message.message.value ?? '',
-        };
-      }).toList();
+      List<Map<String, String>> contextHistory = [];
+
+      if (reOpenedChat) {
+        contextHistory = messages.map((message) {
+          return {
+            'role': message.sentBy == "user" ? "user" : "model",
+            'content': message.message.value ?? '',
+          };
+        }).toList();
+      }
 
       // Limit context size if needed (e.g. last 10 messages)
       if (contextHistory.length > 10) {
@@ -377,7 +382,7 @@ class ChatController extends GetxController {
         _stopAnimation();
       });
       userPrompt.value = "";
-      // _saveChatToFirebase();
+      _saveChatToFirebase();
     } else {
       debugPrint(messages[messages.length - 1].message.value);
     }

@@ -72,6 +72,7 @@ class HomePage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
+                                chatController.reOpenedChat = false;
                                 chatController.currentChatId = '';
                                 chatController.messages.value = [];
                                 Get.to(() => const ChatPage());
@@ -254,6 +255,7 @@ class HomePage extends StatelessWidget {
                                   )
                                 : ChatCard(
                                     onTap: () {
+                                      chatController.reOpenedChat = true;
                                       chatController.currentChatId =
                                           chatController.chats[index].chatId;
                                       chatController.messages.value =
@@ -289,6 +291,7 @@ class HomePage extends StatelessWidget {
                                   )
                                 : ChatCard(
                                     onTap: () {
+                                      chatController.reOpenedChat = true;
                                       chatController.currentChatId =
                                           chatController.chats[index].chatId;
                                       chatController.messages.value =
