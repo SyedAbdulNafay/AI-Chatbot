@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../services/widgets/email_bottom_sheet.dart';
@@ -43,7 +44,7 @@ class ProfileController extends GetxController {
       double screenHeight, double screenWidth) async {
     // i have to tweak the design of the bottom sheet, for now making it simple
     await Get.bottomSheet(
-      backgroundColor: Get.theme.colorScheme.surface,
+      backgroundColor: Colors.transparent,
       ThemeBottomSheet(
         themes: themes,
         screenHeight: screenHeight,
@@ -57,11 +58,12 @@ class ProfileController extends GetxController {
     required double screenWidth,
   }) async {
     await Get.bottomSheet(
-        EmailBottomSheet(
-          screenWidth: screenWidth,
-          screenHeight: screenHeight,
-          options: options,
-        ),
-        backgroundColor: Get.theme.colorScheme.surface);
+      EmailBottomSheet(
+        screenWidth: screenWidth,
+        screenHeight: screenHeight,
+        options: options,
+      ),
+      backgroundColor: Colors.transparent,
+    );
   }
 }

@@ -374,15 +374,11 @@ class ChatController extends GetxController {
         contextHistory = contextHistory.sublist(contextHistory.length - 10);
       }
 
-      // Send the request with chat history as context
-      _aiService
-          .generateResponseStream(userPrompt.value, contextHistory)
-          .listen((response) {
-        aiMessage.message.value = (aiMessage.message.value ?? '') + response;
-        _stopAnimation();
-      });
+      aiMessage.message.value = await _aiService.generateResponseStream(
+          userPrompt.value, contextHistory);
       userPrompt.value = "";
-      _saveChatToFirebase();
+      _stopAnimation();
+      // _saveChatToFirebase();
     } else {
       debugPrint(messages[messages.length - 1].message.value);
     }

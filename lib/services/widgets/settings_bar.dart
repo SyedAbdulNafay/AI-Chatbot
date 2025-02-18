@@ -25,42 +25,34 @@ class SettingsBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final LayoutController layoutController = Get.find();
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-          vertical: layoutController.responsiveHeight(24, screenHeight)),
-      decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  color: Get.theme.colorScheme.tertiary
-                      .withOpacity(noBorder ? 0 : 0.28)))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          leading,
-          Row(
-            children: [
-              if (trailing != null)
-                Text(
-                  trailing!,
-                  style: TextStyle(
-                    color: Get.theme.colorScheme.tertiary,
-                    fontSize: 16,
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            vertical: layoutController.responsiveHeight(36, screenHeight)),
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    color: Get.theme.colorScheme.tertiary
+                        .withOpacity(noBorder ? 0 : 0.28)))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            leading,
+            Row(
+              children: [
+                if (trailing != null)
+                  Text(
+                    trailing!,
+                    style: TextStyle(
+                      color: Get.theme.colorScheme.tertiary,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-              if (trailing != null)
-                SizedBox(
-                  width: layoutController.responsiveWidth(16, screenWidth),
-                ),
-              IconButton(
-                  onPressed: onPressed,
-                  icon: Icon(
-                    CupertinoIcons.arrow_up_right,
-                    color: Get.theme.colorScheme.tertiary,
-                    size: 20,
-                  ))
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/layout_controller.dart';
+import 'bottom_sheet_clipper.dart';
 import 'settings_bar.dart';
 
 class EmailBottomSheet extends StatelessWidget {
@@ -24,41 +25,53 @@ class EmailBottomSheet extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Container(
-            height: 4,
-            width: 40,
-            decoration: BoxDecoration(
-                color: Get.theme.colorScheme.tertiary,
-                borderRadius: BorderRadius.circular(2)),
-          ),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            ClipPath(
+              clipper: BottomSheetClipper(),
+              child: Container(
+                height: 16,
+                color: Get.theme.colorScheme.surface,
+              ),
+            ),
+            Container(
+              height: 4,
+              width: 38,
+              decoration: BoxDecoration(
+                  color: Get.theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+          ],
         ),
-        ListView.builder(
-          padding: EdgeInsets.symmetric(
-              horizontal: layoutController.responsiveWidth(32, screenWidth)),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: options.length,
-          itemBuilder: (context, index) {
-            return SettingsBar(
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
-                onPressed: () async {
-                  await authController.signOut();
-                },
-                leading: Text(
-                  options[index],
-                  style: TextStyle(
-                    color: index == options.length - 1
-                        ? Colors.red
-                        : Get.theme.colorScheme.inversePrimary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+        Container(
+          color: Get.theme.colorScheme.surface,
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(
+                horizontal: layoutController.responsiveWidth(32, screenWidth)),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: options.length,
+            itemBuilder: (context, index) {
+              return SettingsBar(
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                  onPressed: () async {
+                    await authController.signOut();
+                  },
+                  leading: Text(
+                    options[index],
+                    style: TextStyle(
+                      color: index == options.length - 1
+                          ? Colors.red
+                          : Get.theme.colorScheme.inversePrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                noBorder: index == options.length - 1);
-          },
+                  noBorder: index == options.length - 1);
+            },
+          ),
         ),
       ],
     );

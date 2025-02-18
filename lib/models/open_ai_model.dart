@@ -18,8 +18,8 @@ class OpenAIModel {
     return response.text;
   }
 
-  Stream<String> generateResponseStream(
-    String prompt, List<Map<String, String>> context) async* {
+  Future<String?> generateResponseStream(
+    String prompt, List<Map<String, String>> context) async {
   // Convert chat history to Gemini API format
   List<Map<String, dynamic>> formattedHistory = [];
 
@@ -62,9 +62,10 @@ class OpenAIModel {
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    yield data["candidates"][0]["content"]["parts"][0]["text"];
+    return data["candidates"][0]["content"]["parts"][0]["text"];
   } else {
     debugPrint("Error ${response.statusCode}: ${response.body}");
   }
+  return null;
 }
 }
