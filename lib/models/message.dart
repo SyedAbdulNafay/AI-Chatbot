@@ -4,11 +4,13 @@ class Message {
   final String sentBy;
   final RxnString message;
   final DateTime dateTime;
+  bool showAnimation;
 
   Message({
     required this.sentBy,
     String? message,
     required this.dateTime,
+    this.showAnimation = true,
   }) : message = RxnString(message);
 
   Map<String, dynamic> toJson() {
@@ -16,6 +18,7 @@ class Message {
       'sentBy': sentBy,
       'message': message.value,
       'dateTime': dateTime.toIso8601String(),
+      'showAnimation': showAnimation,
     };
   }
 
@@ -24,6 +27,7 @@ class Message {
       sentBy: json['sentBy'],
       message: json['message'],
       dateTime: DateTime.parse(json['dateTime']),
+      showAnimation: json['showAnimation'],
     );
   }
 }

@@ -280,7 +280,7 @@ class ChatController extends GetxController {
     return spans;
   }
 
-  Future<void> _saveChatToFirebase() async {
+  Future<void> saveChatToFirebase() async {
     if (messages.isNotEmpty) {
       if (chats.isNotEmpty &&
           chats.any((chat) => chat.chatId == currentChatId)) {

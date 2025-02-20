@@ -176,19 +176,46 @@ class ChatPage extends StatelessWidget {
                                                       .primary,
                                                 ),
                                               )
-                                            : RichText(
-                                                text: TextSpan(
-                                                    style: TextStyle(
-                                                      color: Get
-                                                          .theme
-                                                          .colorScheme
-                                                          .inversePrimary,
-                                                      fontSize: 16,
-                                                    ),
-                                                    children: chatController
-                                                        .parseResponse(message
-                                                            .message
-                                                            .value!))))),
+                                            : message.showAnimation
+                                                ? AnimatedTextKit(
+                                                    onFinished: () async {
+                                                      message.showAnimation =
+                                                          false;
+                                                      // await chatController
+                                                      //     .saveChatToFirebase();
+                                                    },
+                                                    totalRepeatCount: 1,
+                                                    isRepeatingAnimation: false,
+                                                    animatedTexts: [
+                                                        TypewriterAnimatedText(
+                                                          message
+                                                              .message.value!,
+                                                          textStyle: TextStyle(
+                                                              fontSize: 16,
+                                                              color: Get
+                                                                  .theme
+                                                                  .colorScheme
+                                                                  .inversePrimary,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          speed: const Duration(
+                                                              milliseconds: 80),
+                                                        ),
+                                                      ])
+                                                : RichText(
+                                                    text: TextSpan(
+                                                        style: TextStyle(
+                                                          color: Get
+                                                              .theme
+                                                              .colorScheme
+                                                              .inversePrimary,
+                                                          fontSize: 16,
+                                                        ),
+                                                        children: chatController
+                                                            .parseResponse(
+                                                                message.message
+                                                                    .value!))))),
                                   ),
                                   Row(
                                     children: [
