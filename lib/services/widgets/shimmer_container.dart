@@ -36,9 +36,12 @@ class ShimmerContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              decoration: BoxDecoration(
+                color: Get.theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(4),
+              ),
               margin: EdgeInsets.only(
                   bottom: layoutController.responsiveHeight(12, screenHeight)),
-              color: Get.theme.colorScheme.surface,
               width: double.maxFinite,
               height: 16,
             ),
@@ -50,7 +53,10 @@ class ShimmerContainer extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.only(top: 5),
-                    color: Get.theme.colorScheme.surface,
+                    decoration: BoxDecoration(
+                      color: Get.theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                     height: 16,
                     width: Random().nextInt(150) + 50,
                   ),
@@ -60,7 +66,10 @@ class ShimmerContainer extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(
                   top: layoutController.responsiveHeight(12, screenHeight)),
-              color: Get.theme.colorScheme.surface,
+              decoration: BoxDecoration(
+                color: Get.theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(4),
+              ),
               height: 14,
               width: 100,
             )
